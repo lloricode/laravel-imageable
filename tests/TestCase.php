@@ -20,6 +20,14 @@ class TestCase extends Orchestra
      */
     protected function setUpDatabase($app)
     {
+        include_once __DIR__.'/../database/migrations/migration.stub';
+        (new \CreateImageablesTable())->up();
+
+        $app['db']->connection()->getSchemaBuilder()->create('test_models', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
     }
     protected function getPackageAliases($app)
     {

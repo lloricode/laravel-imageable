@@ -1,0 +1,68 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateImageablesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('images', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->integer('user_id')->unsigned();
+            $table->morphs('imageable');
+
+            $table->timestamp('created_at');
+        });
+
+        Schema::create('image_files', function (Blueprint $table) {
+            $table->increments('id');
+            
+            $table->integer('image_id')
+                ->unsigned();
+            $table->foreign('image_id')
+                ->references('id')
+                ->on('images')
+                ->onDelete('cascade');
+
+            $table->string('size_name');
+            $table->unsignedInteger('width');
+            $table->unsignedInteger('height');
+
+            $table->string('content_type');
+            $table->string('extension');
+            $table->string('path')->collation = 'utf8_unicode_ci';
+
+            $table->unsignedInteger('bytes')->comment('Size in Bytes');
+            $table->unsignedTinyInteger('is_storage')->default(true);
+            
+            $table->timestamp('created_at');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('images');
+        Schema::dropIfExists('image_files');
+    }
+
+    protected function jsonable(): string
+    {
+        return DB::connection()->getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql'
+               && version_compare(DB::connection()->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION), '5.7.8', 'ge')
+            ? 'json' : 'text';
+    }
+
+}

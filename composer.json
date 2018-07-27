@@ -18,13 +18,17 @@
         "friendsofphp/php-cs-fixer": "^2.12"
     },
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "Lloricode\\LaravelImageable\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Lloricode\\LaravelImageable\\Tests\\": "tests/"
+            "Lloricode\\LaravelImageable\\Tests\\": "tests/",
+            "App\\": "tests/models/"
         }
     },
     "extra": {

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestModel extends Model
 {
-    use \Lloricode\LaravelImageable\Models\Traits\ImagesTrait;
+    use \Lloricode\LaravelImageable\Models\Traits\ImageableTrait;
 
     /**
      * The attributes that are mass assignable.

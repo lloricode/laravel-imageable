@@ -5,8 +5,6 @@ use Lloricode\LaravelImageable\Tests\TestCase;
 use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
 use Lloricode\LaravelImageable\Models\Image;
 use Lloricode\LaravelImageable\Models\ImageFile;
-use Illuminate\Http\UploadedFile;
-use Storage;
 
 class TestUploader extends TestCase
 {
@@ -16,36 +14,9 @@ class TestUploader extends TestCase
         $this->actingAs($this->user);
     }
 
-    private function _generateFakeFile(int $count = 1, $ext = 'jpg')
-    {
-        if ($count === 1) {
-            return UploadedFile::fake()->image("avatar.$ext");
-        }
-
-        $files = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            $files[] = UploadedFile::fake()->image("avatar$i.$ext");
-        }
-
-        return $files;
-    }
-
-    private function _assertStorage(Image $image)
-    {
-        foreach ($image->imageFiles as $imageFile) {
-            if ($imageFile->is_storage) {
-                Storage::disk('local')->assertExists(str_replace('app/', '', $imageFile->path));
-            } else {
-                $this->assertTrue(file_exists(public_path($imageFile->path)));
-            }
-        }
-    }
-
-
     public function testUploadFile1()
     {
-        $fakeImage = $this->_generateFakeFile();
+        $fakeImage = $this->generateFakeFile();
 
         $image =  $this->testModel
             ->images($fakeImage)
@@ -54,13 +25,16 @@ class TestUploader extends TestCase
             ->upload();
 
 
-        $this->_assertStorage($image);
+        $this->assertStorage($image);
 
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
             'imageable_type' => get_class($this->testModel),
             'user_id' => $this->user->id,
+            'id' => $image->id,
         ]);
+
+        $this->assertEquals(1, count($image->imageFiles));
 
         $this->assertDatabaseHas((new ImageFile)->getTable(), [
             'size_name' => 'test',
@@ -71,12 +45,13 @@ class TestUploader extends TestCase
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',
+            'id' => $image->imageFiles->first()->id,
         ]);
     }
 
     public function testUploadFileContentTypesPNG()
     {
-        $fakeImage = $this->_generateFakeFile(1, 'png');
+        $fakeImage = $this->generateFakeFile(1, 'png');
 
         $image =      $this->testModel
             ->images($fakeImage)
@@ -85,7 +60,7 @@ class TestUploader extends TestCase
             ->contentTypes(['image/png','image/jpg'])
             ->upload();
 
-        $this->_assertStorage($image);
+        $this->assertStorage($image);
 
 
         $this->assertDatabaseHas((new Image)->getTable(), [
@@ -108,7 +83,7 @@ class TestUploader extends TestCase
 
     public function testUploadFilePublicStorage()
     {
-        $fakeImage = $this->_generateFakeFile();
+        $fakeImage = $this->generateFakeFile();
 
         $image =   $this->testModel
             ->images($fakeImage)
@@ -118,7 +93,7 @@ class TestUploader extends TestCase
             ->upload();
 
 
-        $this->_assertStorage($image);
+        $this->assertStorage($image);
 
 
         $this->assertDatabaseHas((new Image)->getTable(), [
@@ -141,7 +116,7 @@ class TestUploader extends TestCase
 
     public function testUploadFileGroup()
     {
-        $fakeImage = $this->_generateFakeFile();
+        $fakeImage = $this->generateFakeFile();
 
         $image = $this->testModel
             ->images($fakeImage)
@@ -150,7 +125,7 @@ class TestUploader extends TestCase
             ->group('banner-primary')
             ->upload();
         
-        $this->_assertStorage($image);
+        $this->assertStorage($image);
         
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
@@ -172,7 +147,7 @@ class TestUploader extends TestCase
 
     public function testUploadFileCategory()
     {
-        $fakeImage = $this->_generateFakeFile();
+        $fakeImage = $this->generateFakeFile();
 
         $image =   $this->testModel
             ->images($fakeImage)
@@ -181,7 +156,7 @@ class TestUploader extends TestCase
             ->category('banner')
             ->upload();
 
-        $this->_assertStorage($image);
+        $this->assertStorage($image);
         
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
@@ -203,7 +178,7 @@ class TestUploader extends TestCase
 
     public function testUploadFilesMultiple()
     {
-        $fakeImages = $this->_generateFakeFile(2);
+        $fakeImages = $this->generateFakeFile(2);
 
         $image=  $this->testModel
             ->images($fakeImages)
@@ -214,7 +189,9 @@ class TestUploader extends TestCase
             ->maxCount(2)
             ->upload();
 
-        $this->_assertStorage($image);
+        $this->assertStorage($image);
+
+        $this->assertEquals(4, count($image->imageFiles));
 
         
         $this->assertDatabaseHas((new Image)->getTable(), [

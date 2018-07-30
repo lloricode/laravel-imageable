@@ -55,7 +55,8 @@ class Uploader
     {
         $uploadedFiles = $this->_uploadedFiles;
 
-        if ($uploadedFiles->count() > $this->_maxCount) {
+        // ignore if zero for no limit
+        if ($this->_maxCount !== 0 && $uploadedFiles->count() > $this->_maxCount) {
             dd(__METHOD__, 'must not exceed of of maximum files of ' .$this->_maxCount);
         }
 
@@ -174,7 +175,7 @@ class Uploader
 
     public function maxCount(int $maxCount) :self
     {
-        if ($maxCount < 1) {
+        if ($maxCount < 0) {
             dd(__METHOD__, 'invalid maxCount.');
         }
         $this->_maxCount = $maxCount;

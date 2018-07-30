@@ -1,4 +1,5 @@
 <?php
+
 namespace Lloricode\LaravelImageable\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -10,6 +11,8 @@ use File;
 
 class TestCase extends Orchestra
 {
+    use Functions;
+    
     protected $testModel;
     protected $user;
 

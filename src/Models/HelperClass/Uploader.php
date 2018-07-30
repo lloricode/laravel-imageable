@@ -70,6 +70,15 @@ class Uploader
         
         $storagePath = $this->_storagePath();
 
+        // check content types
+        if (!is_null($this->_contentTypes)) {
+            $uploadedFiles->map(function ($uploadedFile, $key) {
+                if (!in_array($uploadedFile->getClientMimeType(), $this->_contentTypes)) {
+                    dd(__METHOD__, 'invalid content type it must [ '. implode(', ', $this->_contentTypes) .' ].');
+                }
+            });
+        }
+
         return $uploadedFiles->map(function ($uploadedFile, $key) use ($storagePath, $imageModel) {
             $filePaths = [];
             foreach ($this->_formats as $format) {
@@ -106,6 +115,8 @@ class Uploader
                     'path' => $filePath,
                     'bytes' => $uploadedFile->getClientSize(),
                     'is_storage' => $this->_isStorage,
+                    'category' => $this->_category,
+                    'group' => $this->_group,
                 ];
 
                 $imageModel->imageFiles()->create($data);

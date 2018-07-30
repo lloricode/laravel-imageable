@@ -51,7 +51,7 @@ class Uploader
     }
 
 
-    public function upload()
+    public function upload() :ImageModel
     {
         $uploadedFiles = $this->_uploadedFiles;
 
@@ -79,7 +79,7 @@ class Uploader
             });
         }
 
-        return $uploadedFiles->map(function ($uploadedFile, $key) use ($storagePath, $imageModel) {
+        $uploadedFiles->map(function ($uploadedFile, $key) use ($storagePath, $imageModel) {
             $filePaths = [];
             foreach ($this->_formats as $format) {
                 $filePath =$storagePath .'/'.  md5(
@@ -106,7 +106,7 @@ class Uploader
                 $pathToRemove = $this->_isStorage ? storage_path() : public_path();
                 $filePath = str_replace(realpath($pathToRemove), '', $filePath);
 
-                $data = [
+                $imageModel->imageFiles()->create([
                     'size_name' => $format['n'],
                     'width' => $format['w'],
                     'height' => $format['h'],
@@ -117,15 +117,11 @@ class Uploader
                     'is_storage' => $this->_isStorage,
                     'category' => $this->_category,
                     'group' => $this->_group,
-                ];
-
-                $imageModel->imageFiles()->create($data);
-
-                $filePaths[] = $data;
+                ]);
             }
-
-            return $filePaths;
         });
+
+        return $imageModel;
     }
 
     private function _storagePath()

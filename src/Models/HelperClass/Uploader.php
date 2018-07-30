@@ -81,7 +81,6 @@ class Uploader
         }
 
         $uploadedFiles->map(function ($uploadedFile, $key) use ($storagePath, $imageModel) {
-            $filePaths = [];
             foreach ($this->_formats as $format) {
                 $filePath =$storagePath .'/'.  md5(
                     implode('', $format).

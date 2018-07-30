@@ -2,7 +2,7 @@
 ### [STILL ON DEVELOPING]
 [![Build Status](https://travis-ci.org/lloricode/laravel-imageable.svg?branch=develop)](https://travis-ci.org/lloricode/laravel-imageable)
 
-Painless uploading/getting images to your eloquent models.
+Painless uploading and manages images to your eloquent laravel models.
 
 
 

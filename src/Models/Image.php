@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     const UPDATED_AT = null;
+    const PATH_FOLDER = 'images';
 
     /**
      * Declared Fillables

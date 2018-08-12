@@ -41,10 +41,11 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'is_storage' => true,
+            'storage_driver' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',
+            // 'size' => 1234000,
             'id' => $image->imageFiles->first()->id,
         ]);
     }
@@ -74,7 +75,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'png',
-            'is_storage' => true,
+            'storage_driver' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/png',
@@ -87,9 +88,9 @@ class TestUploader extends TestCase
 
         $image =   $this->testModel
             ->images($fakeImage)
-            ->formats([['n' => 'test', 'w' => 120, 'h' => 300, 'c' => true]])
+            ->formats([['n' => 'public test', 'w' => 120, 'h' => 300, 'c' => true]])
             ->maxCount(1)
-            ->isStorage(false)
+            ->storageDriver('public')
             ->upload();
 
 
@@ -103,11 +104,11 @@ class TestUploader extends TestCase
         ]);
 
         $this->assertDatabaseHas((new ImageFile)->getTable(), [
-            'size_name' => 'test',
+            'size_name' => 'public test',
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'is_storage' => false,
+            'storage_driver' => 'public',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',
@@ -138,7 +139,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'is_storage' => true,
+            'storage_driver' => 'local',
             'group' => 'banner-primary',
             'category' => null,
             'content_type' => 'image/jpeg',
@@ -169,7 +170,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'is_storage' => true,
+            'storage_driver' => 'local',
             'group' => null,
             'category' => 'banner',
             'content_type' => 'image/jpeg',
@@ -205,7 +206,7 @@ class TestUploader extends TestCase
             'width' => 100,
             'height' => 100,
             'extension' => 'jpg',
-            'is_storage' => true,
+            'storage_driver' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',
@@ -216,7 +217,7 @@ class TestUploader extends TestCase
             'width' => 300,
             'height' => 300,
             'extension' => 'jpg',
-            'is_storage' => true,
+            'storage_driver' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',

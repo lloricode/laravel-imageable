@@ -7,7 +7,8 @@ use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
 use Illuminate\Database\Schema\Blueprint;
 use App\Models\TestModel;
 use App\Models\User;
-use File;
+use Illuminate\Support\Facades\Storage;
+use Lloricode\LaravelImageable\Models\Image;
 
 class TestCase extends Orchestra
 {
@@ -25,14 +26,12 @@ class TestCase extends Orchestra
 
     public function tearDown()
     {
-        // storage
-        if (File::exists(Uploader::path(true))) {
-            $this->assertTrue(File::deleteDirectory(Uploader::path(true)));
-        }
-
-        // public
-        if (File::exists(Uploader::path(false))) {
-            $this->assertTrue(File::deleteDirectory(Uploader::path(false)));
+        $folder = Image::PATH_FOLDER .'/';
+        foreach (array_keys(config('filesystems.disks')) as $driver) {
+            if ($driver == config('filesystems.cloud')) {
+                continue;
+            }
+            Storage::disk($driver)->deleteDirectory($folder);
         }
 
         parent::tearDown();

@@ -4,20 +4,20 @@ namespace Lloricode\LaravelImageable\Tests;
 
 use Lloricode\LaravelImageable\Models\Image;
 use Illuminate\Http\UploadedFile;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 trait Functions
 {
-    protected function generateFakeFile(int $count = 1, $ext = 'jpg')
+    protected function generateFakeFile(int $count = 1, $ext = 'jpg', $size  = 1234)
     {
         if ($count === 1) {
-            return UploadedFile::fake()->image("avatar.$ext");
+            return UploadedFile::fake()->image("avatar.$ext")->size($size);
         }
 
         $files = [];
 
         for ($i = 0; $i < $count; $i++) {
-            $files[] = UploadedFile::fake()->image("avatar$i.$ext");
+            $files[] = UploadedFile::fake()->image("avatar$i.$ext")->size($size);
         }
 
         return $files;
@@ -26,11 +26,7 @@ trait Functions
     protected function assertStorage(Image $image)
     {
         foreach ($image->imageFiles as $imageFile) {
-            if ($imageFile->is_storage) {
-                Storage::disk('local')->assertExists(str_replace('app/', '', $imageFile->path));
-            } else {
-                $this->assertTrue(file_exists(public_path($imageFile->path)));
-            }
+            Storage::disk($imageFile->storage_driver)->assertExists($imageFile->path);
         }
     }
 }

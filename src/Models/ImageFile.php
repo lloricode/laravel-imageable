@@ -21,6 +21,6 @@ class ImageFile extends Model
         'extension',
         'path',
         'bytes',
-        'is_storage',
+        'storage_driver',
     ];
 }

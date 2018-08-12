@@ -6,7 +6,8 @@ use Lloricode\LaravelImageable\Models\Image as ImageModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Image;
-use File;
+use Exception;
+use Illuminate\Support\Facades\Storage;
 
 class Uploader
 {
@@ -92,7 +93,7 @@ class Uploader
                     $key
                 );
 
-                $image = Image::make($uploadedFile->getRealPath());
+                $image = Image::make($uploadedFile);
                 if ($format['c']) {
                     $image->fit($format['w'], $format['h']);
                 } else {
@@ -101,10 +102,8 @@ class Uploader
                     });
                 }
                 
-                $image->save($filePath, $format['q']);
-
-                $pathToRemove = $this->_isStorage ? storage_path() : public_path();
-                $filePath = str_replace(realpath($pathToRemove), '', $filePath);
+                // $image->save($filePath, $format['q']);
+                $pathToSave = Storage::disk($this->_storageDriver)->put($filePath, (string) $image->encode());
 
                 $imageModel->imageFiles()->create([
                     'size_name' => $format['n'],
@@ -114,10 +113,11 @@ class Uploader
                     'extension' => $uploadedFile->getClientOriginalExtension(),
                     'path' => $filePath,
                     'bytes' => $uploadedFile->getClientSize(),
-                    'is_storage' => $this->_isStorage,
+                    'storage_driver' => $this->_storageDriver,
                     'category' => $this->_category,
                     'group' => $this->_group,
                 ]);
+                ;
             }
         });
 
@@ -127,16 +127,10 @@ class Uploader
     private function _storagePath()
     {
         $modelclass = strtolower(get_class($this->_model));
+
         $modelClassArray = explode('\\', $modelclass);
-        $storage =  self::path($this->_isStorage);
-        $storage .= $modelClassArray[count($modelClassArray)-1];
-        $storage .= '/' . md5($this->_model->id);
 
-        if (! file_exists($storage)) {
-            File::makeDirectory($storage, 0755, $recursive = true);
-        }
-
-        return realpath($storage);
+        return ImageModel::PATH_FOLDER . '/' . $modelClassArray[count($modelClassArray)-1] . '/' . md5($this->_model->id);
     }
 
     public static function path($isStorage)
@@ -155,14 +149,18 @@ class Uploader
         $this->_formats = null;
         $this->_category = null;
         $this->_group = null;
-        $this->_isStorage = true;
+        $this->_storageDriver = config('filesystems.default');
         $this->_now = now();
     }
 
 
-    public function isStorage(bool $isStorage) :self
+    public function storageDriver(string $storageDriver) :self
     {
-        $this->_isStorage = $isStorage;
+        $drivers = array_keys(config('filesystems.disks'));
+
+        throw_if(!in_array($storageDriver, $drivers), Exception::class, 'Invalid storage parameter in ' . get_class($this) . '->storageDriver($storageDriver)');
+
+        $this->_storageDriver = $storageDriver;
         return $this;
     }
 

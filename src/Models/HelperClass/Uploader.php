@@ -155,8 +155,10 @@ class Uploader
 
     public function disk(string $disk) :self
     {
-        $disks = ['public', 'local'];
-
+        $configFileSystem = config('filesystems');
+        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
+        $disks = array_keys($configFileSystem['disks']);
+       
         throw_if(!in_array($disk, $disks), Exception::class, 'Invalid disk parameter in ' . get_class($this) . '->disk($disk)');
 
         $this->_disk = $disk;

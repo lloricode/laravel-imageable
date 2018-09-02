@@ -42,8 +42,12 @@ class CreateImageablesTable extends Migration
             $table->string('extension');
             $table->string('path')->collation = 'utf8_unicode_ci';
 
-            $table->unsignedInteger('bytes')->comment('Size in Bytes');            
-            $table->enum('disk', ['local', 'public'])->default('local');
+            $table->unsignedInteger('bytes')->comment = 'Size in bytes.';    
+            
+            $configFileSystem = config('filesystems');
+            array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
+
+            $table->enum('disk', array_keys($configFileSystem['disks']))->comment = 'disks in config filesystem, except cloud.';
             
             $table->timestamp('created_at');
         });

@@ -15,6 +15,46 @@ class TestUploader extends TestCase
         $this->actingAs($this->user);
     }
 
+    public function testAllDefault()
+    {
+        $fakeImage = $this->generateFakeFile();
+
+        $image =  $this->testModel
+            ->images($fakeImage)
+            ->each([
+                [
+                    'name' => 'test default',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ]
+            ])
+            ->save();
+
+
+        $this->assertStorage($image);
+
+        $this->assertDatabaseHas((new Image)->getTable(), [
+            'imageable_id' => $this->testModel->id,
+            'imageable_type' => get_class($this->testModel),
+            'user_id' => $this->user->id,
+            'id' => $image->id,
+        ]);
+
+        $this->assertEquals(1, count($image->imageFiles));
+
+        $this->assertDatabaseHas((new ImageFile)->getTable(), [
+            'size_name' => 'test default',
+            'extension' => 'jpg',
+            'disk' => 'local',
+            'group' => null,
+            'category' => null,
+            'content_type' => 'image/jpeg',
+            // 'size' => 1234000,
+            'id' => $image->imageFiles->first()->id,
+        ]);
+    }
+
     public function testUploadFile1()
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);

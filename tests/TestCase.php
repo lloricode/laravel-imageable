@@ -27,12 +27,8 @@ class TestCase extends Orchestra
     public function tearDown()
     {
         $folder = Image::PATH_FOLDER .'/';
-        foreach (array_keys(config('filesystems.disks')) as $driver) {
-            if ($driver == config('filesystems.cloud')) {
-                continue;
-            }
-            Storage::disk($driver)->deleteDirectory($folder);
-        }
+        Storage::disk('local')->deleteDirectory($folder);
+        Storage::disk('public')->deleteDirectory($folder);
 
         parent::tearDown();
     }
@@ -90,7 +86,6 @@ class TestCase extends Orchestra
     protected function getPackageAliases($app)
     {
         return [
-            "Image"=> "Intervention\\Image\\Facades\\Image",
         ];
     }
 
@@ -98,7 +93,6 @@ class TestCase extends Orchestra
     {
         return [
             'Lloricode\LaravelImageable\Providers\LaravelImageableProvider',
-            "Intervention\\Image\\ImageServiceProvider",
         ];
     }
 }

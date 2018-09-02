@@ -26,7 +26,7 @@ trait Functions
     protected function assertStorage(Image $image)
     {
         foreach ($image->imageFiles as $imageFile) {
-            Storage::disk($imageFile->storage_driver)->assertExists($imageFile->path);
+            $this->assertFileExists($imageFile->path);
         }
     }
 }

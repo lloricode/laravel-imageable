@@ -5,9 +5,10 @@ namespace Lloricode\LaravelImageable\Models\HelperClass;
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
-use Image;
+use Spatie\Image\Image;
+use Spatie\Image\Manipulations;
 use Exception;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class Uploader
 {
@@ -19,7 +20,7 @@ class Uploader
     private $_formats;
     private $_category;
     private $_group;
-    private $_isStorage;
+    private $_storageDriver;
     private $_model;
     private $_now;
     
@@ -83,7 +84,7 @@ class Uploader
 
         $uploadedFiles->map(function ($uploadedFile, $key) use ($storagePath, $imageModel) {
             foreach ($this->_formats as $format) {
-                $filePath =$storagePath .'/'.  md5(
+                $filePath = $storagePath .'/'.  md5(
                     implode('', $format).
                     get_class($this->_model) .
                     $this->_model->id .
@@ -91,27 +92,23 @@ class Uploader
                     $this->_category.
                     $this->_group.
                     $key
-                );
-
-                $image = Image::make($uploadedFile);
-                if ($format['c']) {
-                    $image->fit($format['w'], $format['h']);
-                } else {
-                    $image->resize($format['w'], $format['h'], function ($crop) {
-                        $crop->aspectRatio();
-                    });
-                }
+                ) . '.' . $uploadedFile->getClientOriginalExtension();
                 
-                // $image->save($filePath, $format['q']);
-                $pathToSave = Storage::disk($this->_storageDriver)->put($filePath, (string) $image->encode());
-
+                // TODO:
+                $crop = Manipulations::FIT_CONTAIN;
+                $pathToSave = Image::load($uploadedFile)
+                    ->optimize()
+                    ->fit($crop, $format['w'], $format['h'])
+                    ->quality($format['q'])
+                    ->save($filePath);
+                  
                 $imageModel->imageFiles()->create([
                     'size_name' => $format['n'],
                     'width' => $format['w'],
                     'height' => $format['h'],
                     'content_type' => $uploadedFile->getClientMimeType(),
                     'extension' => $uploadedFile->getClientOriginalExtension(),
-                    'path' => $filePath,
+                    'path' => str_replace(storage_path('/'), '', $filePath),
                     'bytes' => $uploadedFile->getClientSize(),
                     'storage_driver' => $this->_storageDriver,
                     'category' => $this->_category,
@@ -130,14 +127,23 @@ class Uploader
 
         $modelClassArray = explode('\\', $modelclass);
 
-        return ImageModel::PATH_FOLDER . '/' . $modelClassArray[count($modelClassArray)-1] . '/' . md5($this->_model->id);
+        $path =  ImageModel::PATH_FOLDER . '/' . $modelClassArray[count($modelClassArray)-1] . '/' . md5($this->_model->id);
+
+        $storage =  config("filesystems.disks.{$this->_storageDriver}.root");
+        $path = $storage . '/' . $path;
+
+        if (! file_exists($path)) {
+            File::makeDirectory($path, 0755, true, true);
+        }
+        
+        return   $path;
     }
 
-    public static function path($isStorage)
-    {
-        $folder = self::FOLDER_NAME;
-        return $isStorage ? storage_path("app/$folder/") : public_path("assets/$folder/");
-    }
+    // public static function path($isStorage)
+    // {
+    //     $folder = self::FOLDER_NAME;
+    //     return $isStorage ? storage_path("app/$folder/") : public_path("assets/$folder/");
+    // }
 
 
     private function _resetAttributes()
@@ -149,14 +155,14 @@ class Uploader
         $this->_formats = null;
         $this->_category = null;
         $this->_group = null;
-        $this->_storageDriver = config('filesystems.default');
+        $this->_storageDriver = 'local';
         $this->_now = now();
     }
 
 
     public function storageDriver(string $storageDriver) :self
     {
-        $drivers = array_keys(config('filesystems.disks'));
+        $drivers = ['public', 'local'];
 
         throw_if(!in_array($storageDriver, $drivers), Exception::class, 'Invalid storage parameter in ' . get_class($this) . '->storageDriver($storageDriver)');
 

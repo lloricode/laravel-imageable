@@ -50,6 +50,8 @@ class CreateImageablesTable extends Migration
             $table->enum('disk', array_keys($configFilesystem['disks']))->comment = 'disks in config filesystem, except cloud.';
             
             $table->timestamp('created_at');
+
+            $table->unique(['group', 'category']);
         });
     }
 

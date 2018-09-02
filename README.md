@@ -30,7 +30,14 @@ class MyModel extends Model
 ```php
        $myModel
        ->images($image) // instance of \Illuminate\Http\UploadedFile
-       ->formats([['n' => 'test', 'w' => 120, 'h' => 300, 'c' => true]])
+       ->formats([
+           [
+               'n' => 'test', // this will be use in calling image
+               'w' => 120, // width
+               'h' => 300, // height
+               'f' => Manipulations::FIT_CONTAIN // any value of \Spatie\Image\Manipulations, default is FIT_CONTAIN
+            ]
+        ])
        ->maxCount(1)
        ->upload();
 ```

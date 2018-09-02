@@ -20,6 +20,8 @@ class Uploader
     private $_disk;
     private $_model;
     private $_now;
+
+    private $_configFilesystem;
     
     public function __construct(Model $model, $uploadedFiles)
     {
@@ -35,6 +37,8 @@ class Uploader
             $checkFile($uploadedFiles);
             $uploadedFiles = [$uploadedFiles];
         }
+
+        $this->_configFileSystem = config('filesystems');
 
         $this->_resetAttributes();
 
@@ -135,7 +139,7 @@ class Uploader
 
     private function storagePath($path)
     {
-        return config("filesystems.disks.{$this->_disk}.root") . '/' . $path;
+        return $this->_configFileSystem['disks'][$this->_disk]['root'] . '/' . $path;
     }
 
 
@@ -148,16 +152,24 @@ class Uploader
         $this->_each = null;
         $this->_category = null;
         $this->_group = null;
-        $this->_disk = 'local';
         $this->_now = now();
+
+        $this->_disk =
+            $this->_configFileSystem['default'] == $this->_configFileSystem['cloud']
+            ? $this->_availableDisks()[0]
+            : $this->_configFileSystem['default'];
     }
 
+    private function _availableDisks() :array
+    {
+        $configFileSystem = $this->_configFileSystem;
+        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
+        return array_keys($configFileSystem['disks']);
+    }
 
     public function disk(string $disk) :self
     {
-        $configFileSystem = config('filesystems');
-        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
-        $disks = array_keys($configFileSystem['disks']);
+        $disks = $this->_availableDisks();
        
         throw_if(!in_array($disk, $disks), Exception::class, 'Invalid disk parameter in ' . get_class($this) . '->disk($disk)');
 

@@ -29,15 +29,33 @@ class MyModel extends Model
 ## Usage
 ```php
        $myModel
-       ->images($image) // instance of \Illuminate\Http\UploadedFile
-       ->formats([
-           [
-               'n' => 'test', // this will be use in calling image
-               'w' => 120, // width
-               'h' => 300, // height
-               'f' => Manipulations::FIT_CONTAIN // any value of \Spatie\Image\Manipulations, default is FIT_CONTAIN
-            ]
-        ])
-       ->maxCount(1)
-       ->upload();
+           ->images($fakeImages)  // instance of \Illuminate\Http\UploadedFile
+            ->each([
+                [
+                    'name' => 'img1' , // this will be use in calling image
+                    'spatie' => function ($image) {
+
+                        $image // abstract of spatie/image https://github.com/spatie/image
+                            ->optimize()
+                            ->width(100)
+                            -> // ....
+
+                        return $image;
+                    },
+                ],
+                [
+                    'name' => 'img2', // this will be use in calling image
+                    'spatie' => function ($image) {
+                        
+                        $image // abstract of spatie/image https://github.com/spatie/image
+                         ->greyscale()
+                         -> // ....
+
+                        return $image;
+                    },
+                ],
+            ])
+            ->maxCount(2) // maximum upload
+            ->disk('public') // any disk in config('filesystem) except cloud
+            ->save(); // save mutiple 
 ```

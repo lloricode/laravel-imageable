@@ -22,16 +22,16 @@ class TestMaxCount extends TestCase
 
         $image =  $this->testModel
             ->images($fakeImage)
-            ->formats([
+            ->each([
                 [
-                    'n' => 'test',
-                    'w' => 120,
-                    'h' => 300,
-                    'c' => true
+                    'name' => 'test',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
                 ],
             ])
             ->maxCount(0)
-            ->upload();
+            ->save();
 
         $this->assertEquals($fileCount, count($image->imageFiles));
 

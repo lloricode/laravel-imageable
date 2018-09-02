@@ -15,7 +15,7 @@ class Uploader
     private $_contentTypes;
     private $_maxCount;
     private $_uploadedFiles;
-    private $_formats;
+    private $_each;
     private $_category;
     private $_group;
     private $_disk;
@@ -51,7 +51,7 @@ class Uploader
     }
 
 
-    public function upload() :ImageModel
+    public function save() :ImageModel
     {
         $uploadedFiles = $this->_uploadedFiles;
 
@@ -81,9 +81,9 @@ class Uploader
         }
 
         $uploadedFiles->map(function ($uploadedFile, $key) use ($storagePath, $imageModel) {
-            foreach ($this->_formats as $format) {
+            foreach ($this->_each as $each) {
                 $filePath = $storagePath .'/'.  md5(
-                    implode('', $format).
+                    // implode('', $format).
                     get_class($this->_model) .
                     $this->_model->id .
                     $this->_now->format('Ymdhis') .
@@ -92,16 +92,15 @@ class Uploader
                     $key
                 ) . '.' . $uploadedFile->getClientOriginalExtension();
                                 
-                Image::load($uploadedFile)
-                    ->optimize()
-                    ->fit($format['f'], $format['w'], $format['h'])
-                    ->quality($format['q'])
+                $each['spatie'](Image::load($uploadedFile))
                     ->save($filePath);
+
+                $image = Image::load($filePath);
                 
                 $imageModel->imageFiles()->create([
-                    'size_name' => $format['n'],
-                    'width' => $format['w'],
-                    'height' => $format['h'],
+                    'size_name' => $each['name'],
+                    'width' => $image->getWidth(),
+                    'height' =>  $image->getHeight(),
                     'content_type' => $uploadedFile->getClientMimeType(),
                     'extension' => $uploadedFile->getClientOriginalExtension(),
                     'path' => str_replace(storage_path() . '/', '', $filePath),
@@ -145,7 +144,7 @@ class Uploader
         $this->_uploadedFiles = collect([]);
         $this->_contentTypes = null;
         $this->_maxCount = 1;
-        $this->_formats = null;
+        $this->_each = null;
         $this->_category = null;
         $this->_group = null;
         $this->_disk = 'local';
@@ -178,29 +177,31 @@ class Uploader
         return $this;
     }
 
-    public function formats(array $formats):self
+    public function each(array $formats):self
     {
-        $validated = [];
-        foreach ($formats as $format) {
-            if ((!array_key_exists('w', $format)) or
-            (!array_key_exists('h', $format)) or
-            (!array_key_exists('n', $format))) {
-                dd(__METHOD__, 'invalid formats parameters.');
-            }
+        // $validated = [];
+        // foreach ($formats as $format) {
+        //     if ((!array_key_exists('w', $format)) or
+        //     (!array_key_exists('h', $format)) or
+        //     (!array_key_exists('n', $format))) {
+        //         dd(__METHOD__, 'invalid formats parameters.');
+        //     }
 
-            $fitManipulation = array_key_exists('f', $format)? $format['f'] : Manipulations::FIT_CONTAIN;
+        //     $fitManipulation = array_key_exists('f', $format)? $format['f'] : Manipulations::FIT_CONTAIN;
             
-            $validated[] = [
-                'n' => $format['n'],
-                'w' => $format['w'],
-                'h' => $format['h'],
-                'f' => $fitManipulation,
-                'q' => 90, // TODO: quality
-                'b' => 5000000, // 5mb TODO: max byte
-            ];
-        }
+        //     // $validated[] = [
+        //     //     'n' => $format['n'],
+        //     //     'w' => $format['w'],
+        //     //     'h' => $format['h'],
+        //     //     'f' => $fitManipulation,
+        //     //     'q' => 90, // TODO: quality
+        //     //     'b' => 5000000, // 5mb TODO: max byte
+        //     //     // 'spatie' => $format['spatie'],
+        //     // ];
+        //     $validated[] = $format;
+        // }
 
-        $this->_formats = $validated;
+        $this->_each = $formats;
         return $this;
     }
 

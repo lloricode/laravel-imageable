@@ -5,6 +5,7 @@ use Lloricode\LaravelImageable\Tests\TestCase;
 use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
 use Lloricode\LaravelImageable\Models\Image;
 use Lloricode\LaravelImageable\Models\ImageFile;
+use Spatie\Image\Manipulations;
 
 class TestUploader extends TestCase
 {
@@ -16,13 +17,24 @@ class TestUploader extends TestCase
 
     public function testUploadFile1()
     {
-        $fakeImage = $this->generateFakeFile();
+        $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =  $this->testModel
             ->images($fakeImage)
-            ->formats([['n' => 'test', 'w' => 120, 'h' => 300, 'c' => true]])
+            ->each([
+                [
+                    'name' => 'test',
+                    'spatie' => function ($image) {
+                        $image
+                        ->optimize()
+                        ->fit(Manipulations::FIT_CONTAIN, 120, 300);
+
+                        return $image;
+                    },
+                ]
+            ])
             ->maxCount(1)
-            ->upload();
+            ->save();
 
 
         $this->assertStorage($image);
@@ -52,14 +64,26 @@ class TestUploader extends TestCase
 
     public function testUploadFileContentTypesPNG()
     {
-        $fakeImage = $this->generateFakeFile(1, 'png');
+        $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
         $image =      $this->testModel
             ->images($fakeImage)
-            ->formats([['n' => 'test', 'w' => 120, 'h' => 300, 'c' => true]])
+            ->each([
+                [
+                    'name' => 'test',
+                    'spatie' => function ($image) {
+                        $image
+                        ->optimize()
+                        ->width(120)
+                        ->height(300);
+
+                        return $image;
+                    },
+                ]
+            ])
             ->maxCount(1)
             ->contentTypes(['image/png','image/jpg'])
-            ->upload();
+            ->save();
 
         $this->assertStorage($image);
 
@@ -84,14 +108,25 @@ class TestUploader extends TestCase
 
     public function testUploadFilePublicStorage()
     {
-        $fakeImage = $this->generateFakeFile();
+        $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =   $this->testModel
             ->images($fakeImage)
-            ->formats([['n' => 'public test', 'w' => 120, 'h' => 300, 'c' => true]])
+            ->each([
+                [
+                    'name' => 'public test',
+                    'spatie' => function ($image) {
+                        $image
+                        ->optimize()
+                        ->fit(Manipulations::FIT_CONTAIN, 120, 300)
+                        ->quality(90);
+                        return $image;
+                    },
+                ]
+            ])
             ->maxCount(1)
             ->disk('public')
-            ->upload();
+            ->save();
 
 
         $this->assertStorage($image);
@@ -117,14 +152,26 @@ class TestUploader extends TestCase
 
     public function testUploadFileGroup()
     {
-        $fakeImage = $this->generateFakeFile();
+        $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image = $this->testModel
             ->images($fakeImage)
-            ->formats([['n' => 'test', 'w' => 120, 'h' => 300, 'c' => true]])
+            ->each([
+                [
+                    'name' => 'test',
+                     'spatie' => function ($image) {
+                         $image
+                        ->optimize()
+                        ->width(120)
+                        ->height(300);
+
+                         return $image;
+                     },
+                ]
+            ])
             ->maxCount(1)
             ->group('banner-primary')
-            ->upload();
+            ->save();
         
         $this->assertStorage($image);
         
@@ -148,14 +195,26 @@ class TestUploader extends TestCase
 
     public function testUploadFileCategory()
     {
-        $fakeImage = $this->generateFakeFile();
+        $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =   $this->testModel
             ->images($fakeImage)
-            ->formats([['n' => 'test', 'w' => 120, 'h' => 300, 'c' => true]])
+            ->each([
+                [
+                    'name' => 'test',
+                    'spatie' => function ($image) {
+                        $image
+                        ->optimize()
+                        ->width(120)
+                        ->height(300);
+
+                        return $image;
+                    },
+                ]
+            ])
             ->maxCount(1)
             ->category('banner')
-            ->upload();
+            ->save();
 
         $this->assertStorage($image);
         
@@ -179,16 +238,45 @@ class TestUploader extends TestCase
 
     public function testUploadFilesMultiple()
     {
-        $fakeImages = $this->generateFakeFile(2);
+        $fakeImages = $this->generateFakeFile(2, 'jpg', [
+            [
+                'w'=> 100,
+                'h'=> 100,
+            ],
+            [
+                'w'=> 300,
+                'h'=> 300,
+            ],
+        ]);
 
         $image=  $this->testModel
             ->images($fakeImages)
-            ->formats([
-                ['n' => 'img1' ,'w' => 100, 'h' => 100],
-                ['n' => 'img2', 'w' => 300, 'h' => 300],
+            ->each([
+                [
+                    'name' => 'img1' ,
+                    'spatie' => function ($image) {
+                        $image
+                        ->optimize()
+                        ->width(100)
+                        ->height(100);
+
+                        return $image;
+                    },
+                ],
+                [
+                    'name' => 'img2',
+                    'spatie' => function ($image) {
+                        $image
+                        ->optimize()
+                        ->width(300)
+                        ->height(300);
+
+                        return $image;
+                    },
+                ],
             ])
             ->maxCount(2)
-            ->upload();
+            ->save();
 
         $this->assertStorage($image);
 

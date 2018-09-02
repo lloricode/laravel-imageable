@@ -41,7 +41,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'storage_driver' => 'local',
+            'disk' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',
@@ -75,7 +75,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'png',
-            'storage_driver' => 'local',
+            'disk' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/png',
@@ -90,7 +90,7 @@ class TestUploader extends TestCase
             ->images($fakeImage)
             ->formats([['n' => 'public test', 'w' => 120, 'h' => 300, 'c' => true]])
             ->maxCount(1)
-            ->storageDriver('public')
+            ->disk('public')
             ->upload();
 
 
@@ -108,7 +108,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'storage_driver' => 'public',
+            'disk' => 'public',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',
@@ -139,7 +139,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'storage_driver' => 'local',
+            'disk' => 'local',
             'group' => 'banner-primary',
             'category' => null,
             'content_type' => 'image/jpeg',
@@ -170,7 +170,7 @@ class TestUploader extends TestCase
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
-            'storage_driver' => 'local',
+            'disk' => 'local',
             'group' => null,
             'category' => 'banner',
             'content_type' => 'image/jpeg',
@@ -206,7 +206,7 @@ class TestUploader extends TestCase
             'width' => 100,
             'height' => 100,
             'extension' => 'jpg',
-            'storage_driver' => 'local',
+            'disk' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',
@@ -217,7 +217,7 @@ class TestUploader extends TestCase
             'width' => 300,
             'height' => 300,
             'extension' => 'jpg',
-            'storage_driver' => 'local',
+            'disk' => 'local',
             'group' => null,
             'category' => null,
             'content_type' => 'image/jpeg',

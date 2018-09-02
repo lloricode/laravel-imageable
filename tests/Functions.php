@@ -26,7 +26,8 @@ trait Functions
     protected function assertStorage(Image $image)
     {
         foreach ($image->imageFiles as $imageFile) {
-            $this->assertFileExists($imageFile->path);
+            // dd($imageFile->path);
+            $this->assertFileExists(storage_path($imageFile->path), 'Image file Not found');
         }
     }
 }

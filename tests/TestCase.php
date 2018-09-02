@@ -27,8 +27,8 @@ class TestCase extends Orchestra
     public function tearDown()
     {
         $folder = Image::PATH_FOLDER .'/';
-        Storage::disk('local')->deleteDirectory($folder);
-        Storage::disk('public')->deleteDirectory($folder);
+        // Storage::disk('local')->deleteDirectory($folder);
+        // Storage::disk('public')->deleteDirectory($folder);
 
         parent::tearDown();
     }

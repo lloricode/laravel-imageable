@@ -29,7 +29,7 @@ class MyModel extends Model
 ## Usage
 ```php
        $myModel
-       ->images($fakeImage)
+       ->images($image) // instance of \Illuminate\Http\UploadedFile
        ->formats([['n' => 'test', 'w' => 120, 'h' => 300, 'c' => true]])
        ->maxCount(1)
        ->upload();

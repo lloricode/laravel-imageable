@@ -12,15 +12,13 @@ use Illuminate\Support\Facades\File;
 
 class Uploader
 {
-    private const FOLDER_NAME = 'images';
-
     private $_contentTypes;
     private $_maxCount;
     private $_uploadedFiles;
     private $_formats;
     private $_category;
     private $_group;
-    private $_storageDriver;
+    private $_disk;
     private $_model;
     private $_now;
     
@@ -101,16 +99,17 @@ class Uploader
                     ->fit($crop, $format['w'], $format['h'])
                     ->quality($format['q'])
                     ->save($filePath);
-                  
+                //    dd(str_replace(storage_path() . '/', '', $filePath));
+                
                 $imageModel->imageFiles()->create([
                     'size_name' => $format['n'],
                     'width' => $format['w'],
                     'height' => $format['h'],
                     'content_type' => $uploadedFile->getClientMimeType(),
                     'extension' => $uploadedFile->getClientOriginalExtension(),
-                    'path' => str_replace(storage_path('/'), '', $filePath),
+                    'path' => str_replace(storage_path() . '/', '', $filePath),
                     'bytes' => $uploadedFile->getClientSize(),
-                    'storage_driver' => $this->_storageDriver,
+                    'disk' => $this->_disk,
                     'category' => $this->_category,
                     'group' => $this->_group,
                 ]);
@@ -129,8 +128,7 @@ class Uploader
 
         $path =  ImageModel::PATH_FOLDER . '/' . $modelClassArray[count($modelClassArray)-1] . '/' . md5($this->_model->id);
 
-        $storage =  config("filesystems.disks.{$this->_storageDriver}.root");
-        $path = $storage . '/' . $path;
+        $path = $this->storagePath($path);
 
         if (! file_exists($path)) {
             File::makeDirectory($path, 0755, true, true);
@@ -139,11 +137,10 @@ class Uploader
         return   $path;
     }
 
-    // public static function path($isStorage)
-    // {
-    //     $folder = self::FOLDER_NAME;
-    //     return $isStorage ? storage_path("app/$folder/") : public_path("assets/$folder/");
-    // }
+    private function storagePath($path)
+    {
+        return config("filesystems.disks.{$this->_disk}.root") . '/' . $path;
+    }
 
 
     private function _resetAttributes()
@@ -155,18 +152,18 @@ class Uploader
         $this->_formats = null;
         $this->_category = null;
         $this->_group = null;
-        $this->_storageDriver = 'local';
+        $this->_disk = 'local';
         $this->_now = now();
     }
 
 
-    public function storageDriver(string $storageDriver) :self
+    public function disk(string $disk) :self
     {
-        $drivers = ['public', 'local'];
+        $disks = ['public', 'local'];
 
-        throw_if(!in_array($storageDriver, $drivers), Exception::class, 'Invalid storage parameter in ' . get_class($this) . '->storageDriver($storageDriver)');
+        throw_if(!in_array($disk, $disks), Exception::class, 'Invalid disk parameter in ' . get_class($this) . '->disk($disk)');
 
-        $this->_storageDriver = $storageDriver;
+        $this->_disk = $disk;
         return $this;
     }
 

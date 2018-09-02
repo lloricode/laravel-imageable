@@ -342,6 +342,7 @@ class TestUploader extends TestCase
         ]);
 
         $this->assertDatabaseHas((new ImageFile)->getTable(), [
+            'image_id' => $image->id,
             'size_name' => 'img1',
             'width' => 100,
             'height' => 100,
@@ -353,6 +354,31 @@ class TestUploader extends TestCase
         ]);
 
         $this->assertDatabaseHas((new ImageFile)->getTable(), [
+            'image_id' => $image->id,
+            'size_name' => 'img2',
+            'width' => 300,
+            'height' => 300,
+            'extension' => 'jpg',
+            'disk' => 'local',
+            'group' => 'fake_image_0',
+            'category' => null,
+            'content_type' => 'image/jpeg',
+        ]);
+
+        $this->assertDatabaseHas((new ImageFile)->getTable(), [
+            'image_id' => $image->id,
+            'size_name' => 'img1',
+            'width' => 100,
+            'height' => 100,
+            'extension' => 'jpg',
+            'disk' => 'local',
+            'group' => 'fake_image_1',
+            'category' => null,
+            'content_type' => 'image/jpeg',
+        ]);
+
+        $this->assertDatabaseHas((new ImageFile)->getTable(), [
+            'image_id' => $image->id,
             'size_name' => 'img2',
             'width' => 300,
             'height' => 300,

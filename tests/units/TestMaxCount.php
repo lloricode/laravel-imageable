@@ -18,10 +18,16 @@ class TestMaxCount extends TestCase
     public function testUploadFileNoLimit()
     {
         $fileCount = 20;
-        $fakeImage = $this->generateFakeFile($fileCount);
+        $fakeImages = $this->generateFakeFile($fileCount);
+
+        $_fakeImages = [];
+
+        foreach ($fakeImages as $key => $fakeImage) {
+            $_fakeImages["fake_image_$key"] = $fakeImage;
+        }
 
         $image =  $this->testModel
-            ->images($fakeImage)
+            ->images($_fakeImages)
             ->each([
                 [
                     'name' => 'test',

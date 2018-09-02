@@ -28,11 +28,23 @@ class MyModel extends Model
 ```
 ## Usage
 ```php
+
+        // files to be upload 
+        $imageFiles = [
+            // group => instance of \Illuminate\Http\UploadedFile
+            [
+                'first_image' => $imageFile1,
+            ],
+            [
+                'second_image' => $imageFile2,
+            ],
+        ];
+
        $myModel
-           ->images($fakeImages)  // instance of \Illuminate\Http\UploadedFile
+           ->images($imageFiles) // must array, 
             ->each([
                 [
-                    'name' => 'img1' , // this will be use in calling image
+                    'name' => 'banner' , // this will be use in calling image
                     'spatie' => function ($image) {
 
                         $image // abstract of spatie/image https://github.com/spatie/image
@@ -44,7 +56,7 @@ class MyModel extends Model
                     },
                 ],
                 [
-                    'name' => 'img2', // this will be use in calling image
+                    'name' => 'thumbnail', // this will be use in calling image
                     'spatie' => function ($image) {
                         
                         $image // abstract of spatie/image https://github.com/spatie/image

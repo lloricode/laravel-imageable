@@ -16,28 +16,20 @@ class Uploader
     private $_uploadedFiles;
     private $_each;
     private $_category;
-    private $_group;
     private $_disk;
     private $_model;
     private $_now;
 
     private $_configFilesystem;
     
-    public function __construct(Model $model, $uploadedFiles)
+    public function __construct(Model $model, array $uploadedFiles)
     {
-        $checkFile = function ($uploadedFile) {
+        foreach ($uploadedFiles as $group => $uploadedFile) {
+            throw_if(empty($group) or !is_string($group), Exception::class, 'Must have group in key, and must string.');
+
             throw_if(!($uploadedFile instanceof UploadedFile), Exception::class, 'Must instance of ' . UploadedFile::class);
-        };
-
-        if (is_array($uploadedFiles)) {
-            foreach ($uploadedFiles as $uploadedFile) {
-                $checkFile($uploadedFile);
-            }
-        } else {
-            $checkFile($uploadedFiles);
-            $uploadedFiles = [$uploadedFiles];
         }
-
+       
         $this->_configFileSystem = config('filesystems');
 
         $this->_resetAttributes();
@@ -85,7 +77,7 @@ class Uploader
             });
         }
 
-        $uploadedFiles->map(function ($uploadedFile, $key) use ($storagePath, $imageModel) {
+        $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath, $imageModel) {
             foreach ($this->_each as $each) {
                 $filePath = $storagePath .'/'.  md5(
                     // implode('', $format).
@@ -93,10 +85,9 @@ class Uploader
                     $this->_model->id .
                     $this->_now->format('Ymdhis') .
                     $this->_category.
-                    $this->_group.
-                    $key
+                    $group
                 ) . '.' . $uploadedFile->getClientOriginalExtension();
-                                
+                               
                 $each['spatie'](Image::load($uploadedFile))
                     ->save($filePath);
 
@@ -112,7 +103,7 @@ class Uploader
                     'bytes' => $uploadedFile->getClientSize(),
                     'disk' => $this->_disk,
                     'category' => $this->_category,
-                    'group' => $this->_group,
+                    'group' => $group,
                 ]);
             }
         });
@@ -206,12 +197,6 @@ class Uploader
     public function category(string $category):self
     {
         $this->_category = $category;
-        return $this;
-    }
-
-    public function group(string $group):self
-    {
-        $this->_group = $group;
         return $this;
     }
 }

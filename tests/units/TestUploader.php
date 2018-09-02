@@ -20,7 +20,9 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile();
 
         $image =  $this->testModel
-            ->images($fakeImage)
+            ->images([
+                'default_group' => $fakeImage,
+            ])
             ->each([
                 [
                     'name' => 'test default',
@@ -47,7 +49,7 @@ class TestUploader extends TestCase
             'size_name' => 'test default',
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => null,
+            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
             // 'size' => 1234000,
@@ -60,7 +62,9 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =  $this->testModel
-            ->images($fakeImage)
+            ->images([
+                'default_group' => $fakeImage,
+            ])
             ->each([
                 [
                     'name' => 'test',
@@ -94,7 +98,7 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => null,
+            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
             // 'size' => 1234000,
@@ -107,7 +111,9 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
         $image =      $this->testModel
-            ->images($fakeImage)
+            ->images([
+                'default_group' => $fakeImage,
+            ])
             ->each([
                 [
                     'name' => 'test',
@@ -140,7 +146,7 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'png',
             'disk' => 'local',
-            'group' => null,
+            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/png',
         ]);
@@ -151,7 +157,9 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =   $this->testModel
-            ->images($fakeImage)
+            ->images([
+                'default_group' => $fakeImage,
+            ])
             ->each([
                 [
                     'name' => 'public test',
@@ -184,7 +192,7 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'public',
-            'group' => null,
+            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -195,7 +203,9 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image = $this->testModel
-            ->images($fakeImage)
+            ->images([
+                'banner-primary' => $fakeImage,
+            ])
             ->each([
                 [
                     'name' => 'test',
@@ -210,7 +220,6 @@ class TestUploader extends TestCase
                 ]
             ])
             ->maxCount(1)
-            ->group('banner-primary')
             ->save();
         
         $this->assertStorage($image);
@@ -238,7 +247,9 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =   $this->testModel
-            ->images($fakeImage)
+            ->images([
+                'default_group' => $fakeImage,
+            ])
             ->each([
                 [
                     'name' => 'test',
@@ -270,7 +281,7 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => null,
+            'group' => 'default_group',
             'category' => 'banner',
             'content_type' => 'image/jpeg',
         ]);
@@ -289,8 +300,15 @@ class TestUploader extends TestCase
             ],
         ]);
 
+        $_fakeImages = [];
+
+        foreach ($fakeImages as $key => $fakeImage) {
+            $_fakeImages["fake_image_$key"] = $fakeImage;
+        }
+
+
         $image=  $this->testModel
-            ->images($fakeImages)
+            ->images($_fakeImages)
             ->each([
                 [
                     'name' => 'img1' ,
@@ -335,7 +353,7 @@ class TestUploader extends TestCase
             'height' => 100,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => null,
+            'group' => 'fake_image_0',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -346,7 +364,7 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => null,
+            'group' => 'fake_image_1',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);

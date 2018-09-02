@@ -110,7 +110,6 @@ class Uploader
                     'category' => $this->_category,
                     'group' => $this->_group,
                 ]);
-                ;
             }
         });
 

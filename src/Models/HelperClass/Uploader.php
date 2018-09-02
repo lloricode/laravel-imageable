@@ -91,15 +91,12 @@ class Uploader
                     $this->_group.
                     $key
                 ) . '.' . $uploadedFile->getClientOriginalExtension();
-                
-                // TODO:
-                $crop = Manipulations::FIT_CONTAIN;
-                $pathToSave = Image::load($uploadedFile)
+                                
+                Image::load($uploadedFile)
                     ->optimize()
-                    ->fit($crop, $format['w'], $format['h'])
+                    ->fit($format['f'], $format['w'], $format['h'])
                     ->quality($format['q'])
                     ->save($filePath);
-                //    dd(str_replace(storage_path() . '/', '', $filePath));
                 
                 $imageModel->imageFiles()->create([
                     'size_name' => $format['n'],
@@ -192,15 +189,13 @@ class Uploader
                 dd(__METHOD__, 'invalid formats parameters.');
             }
 
-            $crop = array_key_exists('c', $format)? $format['c'] : false;
-            if (!is_bool($crop)) {
-                dd(__METHOD__, 'invalid crop parameters.');
-            }
+            $fitManipulation = array_key_exists('f', $format)? $format['f'] : Manipulations::FIT_CONTAIN;
+            
             $validated[] = [
                 'n' => $format['n'],
                 'w' => $format['w'],
                 'h' => $format['h'],
-                'c' => $crop,
+                'f' => $fitManipulation,
                 'q' => 90, // TODO: quality
                 'b' => 5000000, // 5mb TODO: max byte
             ];

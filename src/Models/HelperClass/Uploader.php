@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\File;
 class Uploader
 {
     private $_contentTypes;
-    private $_maxCount;
     private $_uploadedFiles;
     private $_each;
     private $_category;
@@ -47,13 +46,6 @@ class Uploader
     public function save() :ImageModel
     {
         $uploadedFiles = $this->_uploadedFiles;
-
-        // ignore if zero for no limit
-        throw_if(
-            $this->_maxCount !== 0 && $uploadedFiles->count() > $this->_maxCount,
-            Exception::class,
-            'Must not exceed of of maximum files of ' .$this->_maxCount
-        );
 
         $user = $this->_getAuthUser();
 
@@ -139,7 +131,6 @@ class Uploader
         $this->_model = null;
         $this->_uploadedFiles = collect([]);
         $this->_contentTypes = null;
-        $this->_maxCount = 1;
         $this->_each = null;
         $this->_category = null;
         $this->_group = null;
@@ -171,14 +162,6 @@ class Uploader
     public function contentTypes(array $contentTypes) :self
     {
         $this->_contentTypes = $contentTypes;
-        return $this;
-    }
-
-    public function maxCount(int $maxCount) :self
-    {
-        throw_if($maxCount < 0, Exception::class, 'Invalid maxCount');
-
-        $this->_maxCount = $maxCount;
         return $this;
     }
 

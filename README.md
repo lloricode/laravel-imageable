@@ -67,7 +67,6 @@ class MyModel extends Model
                     },
                 ],
             ])
-            ->maxCount(2) // maximum upload
             ->disk('public') // any disk in config('filesystem) except cloud
             ->save(); // save mutiple 
 ```

@@ -77,7 +77,6 @@ class TestUploader extends TestCase
                     },
                 ]
             ])
-            ->maxCount(1)
             ->save();
 
 
@@ -127,7 +126,6 @@ class TestUploader extends TestCase
                     },
                 ]
             ])
-            ->maxCount(1)
             ->contentTypes(['image/png','image/jpg'])
             ->save();
 
@@ -172,7 +170,6 @@ class TestUploader extends TestCase
                     },
                 ]
             ])
-            ->maxCount(1)
             ->disk('public')
             ->save();
 
@@ -219,7 +216,6 @@ class TestUploader extends TestCase
                      },
                 ]
             ])
-            ->maxCount(1)
             ->save();
         
         $this->assertStorage($image);
@@ -263,7 +259,6 @@ class TestUploader extends TestCase
                     },
                 ]
             ])
-            ->maxCount(1)
             ->category('banner')
             ->save();
 
@@ -333,7 +328,6 @@ class TestUploader extends TestCase
                     },
                 ],
             ])
-            ->maxCount(2)
             ->save();
 
         $this->assertStorage($image);

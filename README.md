@@ -67,7 +67,7 @@ class MyModel extends Model
                     },
                 ],
             ])
-            ->contentTypes('image/jpeg')
+            ->contentTypes(['image/png','image/jpg'])
             ->disk('public') // any disk in config('filesystem) except cloud
             ->category('banner') // optional
             ->save(); // save mutiple 

@@ -6,7 +6,6 @@ use Lloricode\LaravelImageable\Models\Image as ImageModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Spatie\Image\Image;
-use Spatie\Image\Manipulations;
 use Exception;
 use Illuminate\Support\Facades\File;
 

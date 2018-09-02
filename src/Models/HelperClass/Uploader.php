@@ -24,9 +24,7 @@ class Uploader
     public function __construct(Model $model, $uploadedFiles)
     {
         $checkFile = function ($uploadedFile) {
-            if (!($uploadedFile instanceof UploadedFile)) {
-                dd(__METHOD__, 'must UploadedFile');
-            }
+            throw_if(!($uploadedFile instanceof UploadedFile), Exception::class, 'Must instance of ' . UploadedFile::class);
         };
 
         if (is_array($uploadedFiles)) {
@@ -55,9 +53,11 @@ class Uploader
         $uploadedFiles = $this->_uploadedFiles;
 
         // ignore if zero for no limit
-        if ($this->_maxCount !== 0 && $uploadedFiles->count() > $this->_maxCount) {
-            dd(__METHOD__, 'must not exceed of of maximum files of ' .$this->_maxCount);
-        }
+        throw_if(
+            $this->_maxCount !== 0 && $uploadedFiles->count() > $this->_maxCount,
+            Exception::class,
+            'Must not exceed of of maximum files of ' .$this->_maxCount
+        );
 
         $user = $this->_getAuthUser();
 
@@ -73,9 +73,11 @@ class Uploader
         // check content types
         if (!is_null($this->_contentTypes)) {
             $uploadedFiles->map(function ($uploadedFile, $key) {
-                if (!in_array($uploadedFile->getClientMimeType(), $this->_contentTypes)) {
-                    dd(__METHOD__, 'invalid content type it must [ '. implode(', ', $this->_contentTypes) .' ].');
-                }
+                throw_if(
+                    !in_array($uploadedFile->getClientMimeType(), $this->_contentTypes),
+                    Exception::class,
+                    'Invalid content type it must [ '. implode(', ', $this->_contentTypes) .' ].'
+                );
             });
         }
 
@@ -169,38 +171,21 @@ class Uploader
 
     public function maxCount(int $maxCount) :self
     {
-        if ($maxCount < 0) {
-            dd(__METHOD__, 'invalid maxCount.');
-        }
+        throw_if($maxCount < 0, Exception::class, 'Invalid maxCount');
+
         $this->_maxCount = $maxCount;
         return $this;
     }
 
-    public function each(array $formats):self
+    public function each(array $each):self
     {
-        // $validated = [];
-        // foreach ($formats as $format) {
-        //     if ((!array_key_exists('w', $format)) or
-        //     (!array_key_exists('h', $format)) or
-        //     (!array_key_exists('n', $format))) {
-        //         dd(__METHOD__, 'invalid formats parameters.');
-        //     }
+        foreach ($each as $each_) {
+            foreach (['name', 'spatie'] as $key) {
+                throw_if(!array_key_exists($key, $each_), Exception::class, 'Invalid each parameter in ' . get_class($this) . '->each($each)');
+            }
+        }
 
-        //     $fitManipulation = array_key_exists('f', $format)? $format['f'] : Manipulations::FIT_CONTAIN;
-            
-        //     // $validated[] = [
-        //     //     'n' => $format['n'],
-        //     //     'w' => $format['w'],
-        //     //     'h' => $format['h'],
-        //     //     'f' => $fitManipulation,
-        //     //     'q' => 90, // TODO: quality
-        //     //     'b' => 5000000, // 5mb TODO: max byte
-        //     //     // 'spatie' => $format['spatie'],
-        //     // ];
-        //     $validated[] = $format;
-        // }
-
-        $this->_each = $formats;
+        $this->_each = $each;
         return $this;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lloricode\LaravelImageable\Models\HelperClass;
+namespace Lloricode\LaravelImageable;
 
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
 use Illuminate\Database\Eloquent\Model;

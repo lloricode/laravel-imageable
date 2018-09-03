@@ -2,7 +2,7 @@
 
 namespace Lloricode\LaravelImageable\Models\Traits;
 
-use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
+use Lloricode\LaravelImageable\Uploader;
 
 trait ImageableTrait
 {

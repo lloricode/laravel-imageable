@@ -20,7 +20,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile();
 
         $image =  $this->testModel
-            ->images([
+            ->uploads([
                 'default_group' => $fakeImage,
             ])
             ->each([
@@ -62,7 +62,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =  $this->testModel
-            ->images([
+            ->uploads([
                 'default_group' => $fakeImage,
             ])
             ->each([
@@ -110,7 +110,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
         $image =      $this->testModel
-            ->images([
+            ->uploads([
                 'default_group' => $fakeImage,
             ])
             ->each([
@@ -155,7 +155,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =   $this->testModel
-            ->images([
+            ->uploads([
                 'default_group' => $fakeImage,
             ])
             ->each([
@@ -200,7 +200,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image = $this->testModel
-            ->images([
+            ->uploads([
                 'banner-primary' => $fakeImage,
             ])
             ->each([
@@ -243,7 +243,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $image =   $this->testModel
-            ->images([
+            ->uploads([
                 'default_group' => $fakeImage,
             ])
             ->each([
@@ -303,7 +303,7 @@ class TestUploader extends TestCase
 
 
         $image=  $this->testModel
-            ->images($_fakeImages)
+            ->uploads($_fakeImages)
             ->each([
                 [
                     'name' => 'img1' ,

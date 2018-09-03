@@ -41,7 +41,7 @@ class MyModel extends Model
         ];
 
        $myModel
-           ->images($imageFiles) // must array, 
+           ->uploads($imageFiles) // must array, 
             ->each([
                 [
                     'name' => 'banner' , // this will be use in calling image

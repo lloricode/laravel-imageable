@@ -31,4 +31,9 @@ class Image extends Model
     {
         return $this->hasMany(ImageFile::class);
     }
+
+    public function imageable()
+    {
+        return $this->morphTo();
+    }
 }

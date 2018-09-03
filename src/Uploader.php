@@ -49,12 +49,9 @@ class Uploader
 
         $user = $this->_getAuthUser();
 
-        $imageModel = ImageModel::create([
-            'imageable_id' => $this->_model->id,
-            'imageable_type' => get_class($this->_model),
+        $imageModel = $this->_model->images()->create([
             'user_id' => $user->id,
         ]);
-        
         
         $storagePath = $this->_storagePath();
 

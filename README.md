@@ -75,3 +75,13 @@ class MyModel extends Model
             ->category('banner') // optional
             ->save(); // save mutiple 
 ```
+
+### Getter
+- when `disk` is set to `public`, so meaning image is accessesible to the public forder.
+```php
+    # .. ->disk('public') 
+    $image = $myModel->getImages('public_test');
+    <img href={{ $image->src }} />
+```
+- on private, it will need to make response
+- TODO:

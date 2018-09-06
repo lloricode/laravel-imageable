@@ -25,7 +25,7 @@ class TestUploaderPublic extends TestCase
             ])
             ->each([
                 [
-                    'name' => 'public test',
+                    'name' => 'public_test',
                     'spatie' => function ($image) {
                         $image
                         ->optimize()
@@ -49,7 +49,7 @@ class TestUploaderPublic extends TestCase
         ]);
 
         $this->assertDatabaseHas((new ImageFile)->getTable(), [
-            'size_name' => 'public test',
+            'size_name' => 'public_test',
             'width' => 120,
             'height' => 300,
             'extension' => 'jpg',
@@ -58,5 +58,13 @@ class TestUploaderPublic extends TestCase
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
+
+
+
+        $image = $this->testModel->getImages('public_test');
+
+        $this->assertFileExists(public_path(str_replace(config('app.url'), '', $image->src)));
+        // $this->get($image->src)
+        // ->assertStatus(200);
     }
 }

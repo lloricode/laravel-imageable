@@ -22,6 +22,7 @@ class TestCase extends Orchestra
         parent::setUp();
         
         $this->setUpDatabase($this->app);
+        \Artisan::call('storage:link');
     }
 
     public function tearDown()

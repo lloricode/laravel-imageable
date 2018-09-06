@@ -5,6 +5,7 @@ namespace Lloricode\LaravelImageable\Tests;
 use Lloricode\LaravelImageable\Models\Image;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
 
 trait Functions
 {
@@ -33,8 +34,8 @@ trait Functions
     protected function assertStorage(Image $image)
     {
         foreach ($image->imageFiles as $imageFile) {
-            // dd($imageFile->path);
-            $this->assertFileExists(storage_path($imageFile->path), 'Image file Not found');
+            $storage = Config::get("filesystems.disks.{$imageFile->disk}.root");
+            $this->assertFileExists($storage . '/' . $imageFile->path, 'Image file Not found');
         }
     }
 }

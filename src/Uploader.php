@@ -8,6 +8,7 @@ use Illuminate\Http\UploadedFile;
 use Spatie\Image\Image;
 use Exception;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Config;
 
 class Uploader
 {
@@ -29,7 +30,7 @@ class Uploader
             throw_if(!($uploadedFile instanceof UploadedFile), Exception::class, 'Must instance of ' . UploadedFile::class);
         }
        
-        $this->_configFileSystem = config('filesystems');
+        $this->_configFileSystem = Config::get('filesystems');
 
         $this->_resetAttributes();
 
@@ -88,7 +89,7 @@ class Uploader
                     'height' =>  $image->getHeight(),
                     'content_type' => $uploadedFile->getClientMimeType(),
                     'extension' => $uploadedFile->getClientOriginalExtension(),
-                    'path' => str_replace(storage_path() . '/', '', $filePath),
+                    'path' => str_replace($this->_storageDiskPath(), '', $filePath),
                     'bytes' => $uploadedFile->getClientSize(),
                     'disk' => $this->_disk,
                     'category' => $this->_category,
@@ -102,13 +103,9 @@ class Uploader
 
     private function _storagePath()
     {
-        $modelclass = strtolower(get_class($this->_model));
+        $path =  ImageModel::PATH_FOLDER . '/' . kebab_case(class_basename($this->_model)) . '/' . md5($this->_model->id);
 
-        $modelClassArray = explode('\\', $modelclass);
-
-        $path =  ImageModel::PATH_FOLDER . '/' . $modelClassArray[count($modelClassArray)-1] . '/' . md5($this->_model->id);
-
-        $path = $this->storagePath($path);
+        $path = $this->_storageDiskPath() . $path;
 
         if (! file_exists($path)) {
             File::makeDirectory($path, 0755, true, true);
@@ -117,9 +114,9 @@ class Uploader
         return   $path;
     }
 
-    private function storagePath($path)
+    private function _storageDiskPath()
     {
-        return $this->_configFileSystem['disks'][$this->_disk]['root'] . '/' . $path;
+        return $this->_configFileSystem['disks'][$this->_disk]['root'] . '/';
     }
 
 

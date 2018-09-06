@@ -80,7 +80,7 @@ class MyModel extends Model
 - when `disk` is set to `public`, so meaning image is accessesible to the public forder.
 ```php
     # .. ->disk('public') 
-    $image = $myModel->getImages('public_test');
+    $image = $myModel->getImages('banner'); // a name use when uploading,
     <img href={{ $image->src }} />
 ```
 - on private, it will need to make response

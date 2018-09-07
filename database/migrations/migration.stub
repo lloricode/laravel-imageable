@@ -33,6 +33,8 @@ class CreateImageablesTable extends Migration
                 ->on('images')
                 ->onDelete('cascade');
 
+            $table->string('slug')->unique();
+
             $table->string('size_name');
             $table->string('client_original_name');
             $table->unsignedInteger('width');

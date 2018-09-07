@@ -4,10 +4,13 @@ namespace Lloricode\LaravelImageable\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class ImageFile extends Model
 {
     const UPDATED_AT = null;
+    use HasSlug;
 
     /**
      * Declared Fillables
@@ -33,5 +36,16 @@ class ImageFile extends Model
             ->delete($this->path);
 
         return parent::delete();
+    }
+
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(['size_name', 'width', 'height'])
+            ->saveSlugsTo('slug');
     }
 }

@@ -5,7 +5,6 @@ namespace Lloricode\LaravelImageable\Models\Traits;
 use Lloricode\LaravelImageable\Uploader;
 use Lloricode\LaravelImageable\Getter;
 use Lloricode\LaravelImageable\Models\Image;
-use DB;
 
 trait ImageableTrait
 {
@@ -16,9 +15,7 @@ trait ImageableTrait
 
     public function uploads(array $images):Uploader
     {
-        return DB::transaction(function () use ($images) {
-            return new Uploader($this, $images);
-        });
+        return new Uploader($this, $images);
     }
 
     public function getImages(string $name = null, string $group = null, string $category = null)

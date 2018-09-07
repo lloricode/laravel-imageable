@@ -9,6 +9,7 @@ use Spatie\Image\Image as SpatieImage;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
+use DB;
 
 class Uploader
 {
@@ -60,9 +61,10 @@ class Uploader
             });
         }
 
-        $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
-            foreach ($this->_each as $each) {
-                $filePath = $storagePath . '/' . $each['size_name'] . '-' . md5(
+        DB::transaction(function () use ($uploadedFiles, $storagePath) {
+            $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
+                foreach ($this->_each as $each) {
+                    $filePath = $storagePath . '/' . $each['size_name'] . '-' . md5(
                     get_class($this->_model) .
                     $this->_model->id .
                     $this->_now->format('Ymdhis') .
@@ -70,26 +72,27 @@ class Uploader
                     $group
                 ) . '.' . $uploadedFile->getClientOriginalExtension();
                                
-                $each['spatie'](SpatieImage::load($uploadedFile))
+                    $each['spatie'](SpatieImage::load($uploadedFile))
                     ->save($filePath);
 
-                $image = SpatieImage::load($filePath);
+                    $image = SpatieImage::load($filePath);
                 
-                $this->_model->images()->create([
-                    'user_id' => $this->_getAuthUser()->id,
-                    'client_original_name' => $uploadedFile->getClientOriginalName(),
-                    'size_name' => $each['size_name'],
-                    'width' => $image->getWidth(),
-                    'height' =>  $image->getHeight(),
-                    'content_type' => $uploadedFile->getClientMimeType(),
-                    'extension' => $uploadedFile->getClientOriginalExtension(),
-                    'path' => str_replace($this->_storageDiskPath(), '', $filePath),
-                    'bytes' => $uploadedFile->getClientSize(),
-                    'disk' => $this->_disk,
-                    'category' => $this->_category,
-                    'group' => $group,
-                ]);
-            }
+                    $this->_model->images()->create([
+                        'user_id' => $this->_getAuthUser()->id,
+                        'client_original_name' => $uploadedFile->getClientOriginalName(),
+                        'size_name' => $each['size_name'],
+                        'width' => $image->getWidth(),
+                        'height' =>  $image->getHeight(),
+                        'content_type' => $uploadedFile->getClientMimeType(),
+                        'extension' => $uploadedFile->getClientOriginalExtension(),
+                        'path' => str_replace($this->_storageDiskPath(), '', $filePath),
+                        'bytes' => $uploadedFile->getClientSize(),
+                        'disk' => $this->_disk,
+                        'category' => $this->_category,
+                        'group' => $group,
+                    ]);
+                }
+            });
         });
     }
 

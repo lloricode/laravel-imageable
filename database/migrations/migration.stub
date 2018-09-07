@@ -40,7 +40,7 @@ class CreateImageablesTable extends Migration
 
             $table->timestamp('created_at');
 
-            $table->unique(['size_name', 'group', 'category', 'imageable_id', 'imageable_type']);
+            $table->unique(['size_name', 'group', 'category', 'imageable_id', 'imageable_type'], 'unique_imageable');
         });
 
     }

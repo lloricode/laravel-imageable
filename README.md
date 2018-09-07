@@ -86,43 +86,36 @@ class MyModel extends Model
 ```
 Collection {#3056 ▼
   #items: array:12 [▼
-    0 => {#3282 ▼
+    0 => {#3285 ▼
       +"size_name": "large"
       +"category": null
       +"group": "slide_1"
+      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
       +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
     }
-    1 => {#3283 ▼
+    1 => {#3286 ▼
       +"size_name": "medium"
       +"category": null
       +"group": "slide_1"
+      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
       +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
     }
-    2 => {#3284 ▼
+    2 => {#3287 ▼
       +"size_name": "thumbnail"
       +"category": null
       +"group": "slide_1"
+      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
       +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
     }
-    3 => {#3285 ▼
-      +"size_name": "large"
-      +"category": null
-      +"group": "slide_2"
-      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/65368aff7a9707782424647b4a3fe8d7.png"
-    }
-    4 => {#3286 ▼
-      +"size_name": "medium"
-      +"category": null
-      +"group": "slide_2"
-      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/65368aff7a9707782424647b4a3fe8d7.png"
-    }
-    5 => {#3287 ▶}
-    6 => {#3288 ▶}
-    7 => {#3289 ▶}
-    8 => {#3290 ▶}
-    9 => {#3291 ▶}
-    10 => {#3292 ▶}
-    11 => {#3293 ▶}
+    3 => {#3288 ▶}
+    4 => {#3289 ▶}
+    5 => {#3290 ▶}
+    6 => {#3291 ▶}
+    7 => {#3292 ▶}
+    8 => {#3293 ▶}
+    9 => {#3294 ▶}
+    10 => {#3295 ▶}
+    11 => {#3296 ▶}
   ]
 }
 ```

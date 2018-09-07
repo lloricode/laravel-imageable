@@ -18,7 +18,7 @@ class Getter
         $this->_model = $model;
     }
 
-    public function setName(string $name)
+    public function setName(string $name = null)
     {
         $this->_name = $name;
     }

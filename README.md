@@ -77,11 +77,45 @@ class MyModel extends Model
 ```
 
 ### Getter
-- when `disk` is set to `public`, so meaning image is accessesible to the public forder.
 ```php
     # .. ->disk('public') 
-    $image = $myModel->getImages('banner'); // a size_name use when uploading,
-    <img href={{ $image->src }} />
+    $images = $myModel->getImages('banner'); // a size_name use when uploading,
+    <img href={{ $images[0]->source }} />
 ```
-- on private, it will need to make response
-- TODO:
+- the `images` result:
+```
+Collection {#3056 ▼
+  #items: array:12 [▼
+    0 => {#3285 ▼
+      +"size_name": "large"
+      +"category": null
+      +"group": "slide_1"
+      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
+      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
+    }
+    1 => {#3286 ▼
+      +"size_name": "medium"
+      +"category": null
+      +"group": "slide_1"
+      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
+      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
+    }
+    2 => {#3287 ▼
+      +"size_name": "thumbnail"
+      +"category": null
+      +"group": "slide_1"
+      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
+      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
+    }
+    3 => {#3288 ▶}
+    4 => {#3289 ▶}
+    5 => {#3290 ▶}
+    6 => {#3291 ▶}
+    7 => {#3292 ▶}
+    8 => {#3293 ▶}
+    9 => {#3294 ▶}
+    10 => {#3295 ▶}
+    11 => {#3296 ▶}
+  ]
+}
+```

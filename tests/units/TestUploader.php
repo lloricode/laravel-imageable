@@ -4,7 +4,6 @@ namespace Lloricode\LaravelImageable\Tests\Units;
 use Lloricode\LaravelImageable\Tests\TestCase;
 use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
 use Lloricode\LaravelImageable\Models\Image;
-use Lloricode\LaravelImageable\Models\ImageFile;
 use Spatie\Image\Manipulations;
 
 class TestUploader extends TestCase
@@ -19,13 +18,13 @@ class TestUploader extends TestCase
     {
         $fakeImage = $this->generateFakeFile();
 
-        $image =  $this->testModel
+        $this->testModel
             ->uploads([
                 'default_group' => $fakeImage,
             ])
             ->each([
                 [
-                    'size_name' => 'test default',
+                    'size_name' => 'test_default',
                     'spatie' => function ($image) {
                         return $image;
                     },
@@ -33,35 +32,27 @@ class TestUploader extends TestCase
             ])
             ->save();
 
-
-        $this->assertStorage($image);
-
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
             'imageable_type' => get_class($this->testModel),
             'user_id' => $this->user->id,
-            'id' => $image->id,
-        ]);
-
-        $this->assertEquals(1, count($image->imageFiles));
-
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
-            'size_name' => 'test default',
+            'size_name' => 'test_default',
             'extension' => 'jpg',
             'disk' => 'local',
             'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
-            // 'size' => 1234000,
-            'id' => $image->imageFiles->first()->id,
         ]);
+
+        $this->assertEquals(1, $this->testModel->getImages('test_default')->count());
+        $this->assertEquals(1, $this->testModel->getImages()->count());
     }
 
     public function testUploadFile1()
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
-        $image =  $this->testModel
+        $this->testModel
             ->uploads([
                 'default_group' => $fakeImage,
             ])
@@ -80,18 +71,11 @@ class TestUploader extends TestCase
             ->save();
 
 
-        $this->assertStorage($image);
 
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
             'imageable_type' => get_class($this->testModel),
             'user_id' => $this->user->id,
-            'id' => $image->id,
-        ]);
-
-        $this->assertEquals(1, count($image->imageFiles));
-
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
             'size_name' => 'test',
             'width' => 120,
             'height' => 300,
@@ -100,16 +84,17 @@ class TestUploader extends TestCase
             'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
-            // 'size' => 1234000,
-            'id' => $image->imageFiles->first()->id,
         ]);
+
+        $this->assertEquals(1, $this->testModel->getImages('test')->count());
+        $this->assertEquals(1, $this->testModel->getImages()->count());
     }
 
     public function testUploadFileContentTypesPNG()
     {
         $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
-        $image =      $this->testModel
+        $this->testModel
             ->uploads([
                 'default_group' => $fakeImage,
             ])
@@ -129,16 +114,11 @@ class TestUploader extends TestCase
             ->contentTypes(['image/png','image/jpg'])
             ->save();
 
-        $this->assertStorage($image);
-
 
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
             'imageable_type' => get_class($this->testModel),
             'user_id' => $this->user->id,
-        ]);
-
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
             'size_name' => 'test',
             'width' => 120,
             'height' => 300,
@@ -148,13 +128,17 @@ class TestUploader extends TestCase
             'category' => null,
             'content_type' => 'image/png',
         ]);
+
+
+        $this->assertEquals(1, $this->testModel->getImages('test')->count());
+        $this->assertEquals(1, $this->testModel->getImages()->count());
     }
 
     public function testUploadFileGroup()
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
-        $image = $this->testModel
+        $this->testModel
             ->uploads([
                 'banner-primary' => $fakeImage,
             ])
@@ -173,15 +157,11 @@ class TestUploader extends TestCase
             ])
             ->save();
         
-        $this->assertStorage($image);
         
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
             'imageable_type' => get_class($this->testModel),
             'user_id' => $this->user->id,
-        ]);
-
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
             'size_name' => 'test',
             'width' => 120,
             'height' => 300,
@@ -191,13 +171,16 @@ class TestUploader extends TestCase
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
+
+        $this->assertEquals(1, $this->testModel->getImages('test')->count());
+        $this->assertEquals(1, $this->testModel->getImages()->count());
     }
 
     public function testUploadFileCategory()
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
-        $image =   $this->testModel
+        $this->testModel
             ->uploads([
                 'default_group' => $fakeImage,
             ])
@@ -217,15 +200,11 @@ class TestUploader extends TestCase
             ->category('banner')
             ->save();
 
-        $this->assertStorage($image);
         
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
             'imageable_type' => get_class($this->testModel),
             'user_id' => $this->user->id,
-        ]);
-
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
             'size_name' => 'test',
             'width' => 120,
             'height' => 300,
@@ -235,6 +214,10 @@ class TestUploader extends TestCase
             'category' => 'banner',
             'content_type' => 'image/jpeg',
         ]);
+
+
+        $this->assertEquals(1, $this->testModel->getImages('test')->count());
+        $this->assertEquals(1, $this->testModel->getImages()->count());
     }
 
     public function testUploadFilesMultiple()
@@ -257,7 +240,7 @@ class TestUploader extends TestCase
         }
 
 
-        $image=  $this->testModel
+        $this->testModel
             ->uploads($_fakeImages)
             ->each([
                 [
@@ -285,19 +268,12 @@ class TestUploader extends TestCase
             ])
             ->save();
 
-        $this->assertStorage($image);
-
-        $this->assertEquals(4, count($image->imageFiles));
 
         
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
             'imageable_type' => get_class($this->testModel),
             'user_id' => $this->user->id,
-        ]);
-
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
-            'image_id' => $image->id,
             'size_name' => 'img1',
             'width' => 100,
             'height' => 100,
@@ -308,8 +284,11 @@ class TestUploader extends TestCase
             'content_type' => 'image/jpeg',
         ]);
 
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
-            'image_id' => $image->id,
+        
+        $this->assertDatabaseHas((new Image)->getTable(), [
+            'imageable_id' => $this->testModel->id,
+            'imageable_type' => get_class($this->testModel),
+            'user_id' => $this->user->id,
             'size_name' => 'img2',
             'width' => 300,
             'height' => 300,
@@ -320,8 +299,11 @@ class TestUploader extends TestCase
             'content_type' => 'image/jpeg',
         ]);
 
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
-            'image_id' => $image->id,
+        
+        $this->assertDatabaseHas((new Image)->getTable(), [
+            'imageable_id' => $this->testModel->id,
+            'imageable_type' => get_class($this->testModel),
+            'user_id' => $this->user->id,
             'size_name' => 'img1',
             'width' => 100,
             'height' => 100,
@@ -332,8 +314,11 @@ class TestUploader extends TestCase
             'content_type' => 'image/jpeg',
         ]);
 
-        $this->assertDatabaseHas((new ImageFile)->getTable(), [
-            'image_id' => $image->id,
+        
+        $this->assertDatabaseHas((new Image)->getTable(), [
+            'imageable_id' => $this->testModel->id,
+            'imageable_type' => get_class($this->testModel),
+            'user_id' => $this->user->id,
             'size_name' => 'img2',
             'width' => 300,
             'height' => 300,
@@ -343,5 +328,10 @@ class TestUploader extends TestCase
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
+        
+
+        $this->assertEquals(2, $this->testModel->getImages('img1')->count());
+        $this->assertEquals(2, $this->testModel->getImages('img2')->count());
+        $this->assertEquals(4, $this->testModel->getImages()->count());
     }
 }

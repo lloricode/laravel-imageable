@@ -20,22 +20,13 @@ class CreateImageablesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->morphs('imageable');
 
-            $table->timestamp('created_at');
-        });
-
-        Schema::create('image_files', function (Blueprint $table) {
-            $table->increments('id');
-            
-            $table->integer('image_id')
-                ->unsigned();
-            $table->foreign('image_id')
-                ->references('id')
-                ->on('images')
-                ->onDelete('cascade');
-
+            $table->string('size_name');
             $table->string('slug')->unique();
 
-            $table->string('size_name');
+            $configFilesystem = Config::get('filesystems');
+            array_forget($configFilesystem['disks'], $configFilesystem['cloud']);
+            $table->enum('disk', array_keys($configFilesystem['disks']))->comment = 'disks in config filesystem, except cloud.';
+
             $table->string('client_original_name');
             $table->unsignedInteger('width');
             $table->unsignedInteger('height');
@@ -44,19 +35,14 @@ class CreateImageablesTable extends Migration
 
             $table->string('content_type');
             $table->string('extension');
-            $table->string('path')->collation = 'utf8_unicode_ci';
+            $table->unsignedInteger('bytes')->comment = 'Size in bytes.';  
+            $table->string('path')->collation = 'utf8_unicode_ci';      
 
-            $table->unsignedInteger('bytes')->comment = 'Size in bytes.';    
-            
-            $configFilesystem = Config::get('filesystems');
-            array_forget($configFilesystem['disks'], $configFilesystem['cloud']);
-
-            $table->enum('disk', array_keys($configFilesystem['disks']))->comment = 'disks in config filesystem, except cloud.';
-            
             $table->timestamp('created_at');
 
-            $table->unique(['group', 'category']);
+            $table->unique(['size_name', 'group', 'category', 'imageable_id', 'imageable_type']);
         });
+
     }
 
     /**

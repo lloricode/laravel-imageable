@@ -5,7 +5,7 @@ namespace Lloricode\LaravelImageable;
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
-use Spatie\Image\Image;
+use Spatie\Image\Image as SpatieImage;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
@@ -43,25 +43,9 @@ class Uploader
         return auth()->user(); // TODO: config
     }
 
-    private function _getModelImage():ImageModel
-    {
-        $image = $this->_model->images()->first();
-
-        if (is_null($image)) {
-            $user = $this->_getAuthUser();
-            return $this->_model->images()->create([
-                'user_id' => $user->id,
-            ]);
-        }
-        return $image;
-    }
-
-    public function save() :ImageModel
+    public function save()
     {
         $uploadedFiles = $this->_uploadedFiles;
-
-
-        $imageModel = $this->_getModelImage();
 
         $storagePath = $this->_storagePath();
 
@@ -76,10 +60,9 @@ class Uploader
             });
         }
 
-        $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath, $imageModel) {
+        $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
             foreach ($this->_each as $each) {
-                $filePath = $storagePath .'/'. $each['size_name'] . '-' . md5(
-                    // implode('', $format).
+                $filePath = $storagePath . '/' . $each['size_name'] . '-' . md5(
                     get_class($this->_model) .
                     $this->_model->id .
                     $this->_now->format('Ymdhis') .
@@ -87,12 +70,13 @@ class Uploader
                     $group
                 ) . '.' . $uploadedFile->getClientOriginalExtension();
                                
-                $each['spatie'](Image::load($uploadedFile))
+                $each['spatie'](SpatieImage::load($uploadedFile))
                     ->save($filePath);
 
-                $image = Image::load($filePath);
+                $image = SpatieImage::load($filePath);
                 
-                $imageModel->imageFiles()->create([
+                $this->_model->images()->create([
+                    'user_id' => $this->_getAuthUser()->id,
                     'client_original_name' => $uploadedFile->getClientOriginalName(),
                     'size_name' => $each['size_name'],
                     'width' => $image->getWidth(),
@@ -107,8 +91,6 @@ class Uploader
                 ]);
             }
         });
-
-        return $imageModel;
     }
 
     private function _storagePath()

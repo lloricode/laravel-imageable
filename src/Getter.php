@@ -76,16 +76,7 @@ class Getter
     {
         $images = $this
             ->_model
-            ->images
-            ->first();
-            
-
-        if (is_null($images)) {
-            return null;
-        }
-
-        $images = $images
-            ->imageFiles()
+            ->images()
             ->select(
                 'slug',
                 'disk',
@@ -98,6 +89,12 @@ class Getter
 
         if (!is_null($this->_sizeName)) {
             $images = $images->where('size_name', $this->_sizeName);
+        }
+        if (!is_null($this->_category)) {
+            $images = $images->where('category', $this->_category);
+        }
+        if (!is_null($this->_group)) {
+            $images = $images->where('group', $this->_group);
         }
 
         return $images->get();

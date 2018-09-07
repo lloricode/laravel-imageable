@@ -3,9 +3,13 @@
 namespace Lloricode\LaravelImageable\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Image extends Model
 {
+    use HasSlug;
+
     const UPDATED_AT = null;
     const PATH_FOLDER = 'imageable';
 
@@ -13,9 +17,18 @@ class Image extends Model
      * Declared Fillables
      */
     protected $fillable = [
-        'imageable_id',
-        'imageable_type',
         'user_id',
+        'group',
+        'category',
+        'size_name',
+        'width',
+        'height',
+        'content_type',
+        'extension',
+        'path',
+        'bytes',
+        'disk',
+        'client_original_name',
     ];
 
     /**
@@ -26,10 +39,25 @@ class Image extends Model
         'imageable_type',
         'user_id'
     ];
-
-    public function imageFiles()
+    
+    /**
+    * Get the route key for the model.
+    *
+    * @return string
+    */
+    public function getRouteKeyName()
     {
-        return $this->hasMany(ImageFile::class);
+        return 'slug';
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(['size_name', 'width', 'height'])
+            ->saveSlugsTo('slug');
     }
 
     public function imageable()
@@ -39,9 +67,9 @@ class Image extends Model
 
     public function delete()
     {
-        foreach ($this->imageFiles as $imageFile) {
-            $imageFile->delete();
-        }
+        Storage::disk($this->disk)
+            ->delete($this->path);
+
         return parent::delete();
     }
 }

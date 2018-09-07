@@ -15,11 +15,10 @@ class TestUploaderAccessPrivate extends TestCase
         $this->actingAs($this->user);
     }
 
-    public function testUploadFilePublicStorage()
+    public function testUploadFilePrivateStorage()
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
-
-        $image =   $this->testModel
+        $this->testModel
             ->uploads([
                 'default_p_group' => $fakeImage,
             ])

@@ -48,4 +48,14 @@ class ImageFile extends Model
             ->generateSlugsFrom(['size_name', 'width', 'height'])
             ->saveSlugsTo('slug');
     }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

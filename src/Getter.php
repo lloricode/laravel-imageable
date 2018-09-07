@@ -65,7 +65,7 @@ class Getter
 
             if (is_null($data->source)) {
                 // route\
-                $data->source = route('imageable.web.show', ['imageable'=>$imageFile]);
+                $data->source = route('imageable.web.show', $imageFile);
             }
 
             $return->push($data);
@@ -88,7 +88,7 @@ class Getter
         }
         $images = $images
             ->imageFiles()
-            ->select('id', 'disk', 'path', 'category', 'group', 'size_name', 'client_original_name');
+            ->select('slug', 'disk', 'path', 'category', 'group', 'size_name', 'client_original_name');
 
         if (!is_null($this->_name)) {
             $images = $images->where('size_name', $this->_name);

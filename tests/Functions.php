@@ -30,12 +30,4 @@ trait Functions
 
         return $files;
     }
-
-    // protected function assertStorage(Image $image =null)
-    // {
-    //     // foreach ($image->imageFiles as $imageFile) {
-    //         // $storage = Config::get("filesystems.disks.{$imageFile->disk}.root");
-    //         // $this->assertFileExists($storage . '/' . $imageFile->path, 'Image file Not found');
-    //     // }
-    // }
 }

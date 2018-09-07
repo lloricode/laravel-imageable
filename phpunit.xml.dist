@@ -23,6 +23,7 @@
         <log type="coverage-html" target="./report" lowUpperBound="50" highLowerBound="80" />
     </logging>
     <php>
+        <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
         <env name="APP_URL" value="http://localhost"/>
     </php>
 </phpunit>

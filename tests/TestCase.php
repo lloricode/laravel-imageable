@@ -94,6 +94,7 @@ class TestCase extends Orchestra
     {
         return [
             'Lloricode\LaravelImageable\Providers\LaravelImageableProvider',
+            "Lloricode\\LaravelImageable\\Providers\\LaravelImageableRouteServiceProvider",
         ];
     }
 }

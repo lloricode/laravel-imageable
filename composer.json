@@ -36,7 +36,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Lloricode\\LaravelImageable\\Providers\\LaravelImageableProvider"
+                "Lloricode\\LaravelImageable\\Providers\\LaravelImageableProvider",
+                "Lloricode\\LaravelImageable\\Providers\\LaravelImageableRouteServiceProvider"
             ]
         }
     },

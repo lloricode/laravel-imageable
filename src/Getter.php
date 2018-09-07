@@ -23,12 +23,12 @@ class Getter
         $this->_sizeName = $sizeName;
     }
 
-    public function setGroup(string $group)
+    public function setGroup(string $group = null)
     {
         $this->_group = $group;
     }
 
-    public function setCategory(string $category)
+    public function setCategory(string $category = null)
     {
         $this->_category = $category;
     }

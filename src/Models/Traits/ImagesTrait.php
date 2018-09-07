@@ -22,8 +22,8 @@ trait ImageableTrait
     {
         $getter = new Getter($this);
         $getter->setName($name);
-        // $getter->setGroup($group);
-        // $getter->setCategory($category);
+        $getter->setGroup($group);
+        $getter->setCategory($category);
 
         return $getter->result();
     }

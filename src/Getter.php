@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 class Getter
 {
     private $_model;
-    private $_name;
+    private $_sizeName;
     private $_group;
     private $_category;
 
@@ -18,9 +18,9 @@ class Getter
         $this->_model = $model;
     }
 
-    public function setName(string $name = null)
+    public function setName(string $sizeName = null)
     {
-        $this->_name = $name;
+        $this->_sizeName = $sizeName;
     }
 
     public function setGroup(string $group)
@@ -46,13 +46,11 @@ class Getter
         foreach ($imageFiles as $imageFile) {
             $disk = Config::get("filesystems.disks.{$imageFile->disk}");
 
-            $storage = $disk['root'];
-
             $data = new \stdClass;
 
-            $data->size_name =$imageFile->size_name;
-            $data->category =$imageFile->category;
-            $data->group =$imageFile->group;
+            $data->size_name = $imageFile->size_name;
+            $data->category = $imageFile->category;
+            $data->group = $imageFile->group;
             $data->client_original_name = $imageFile->client_original_name;
             $data->source = null;
             
@@ -64,7 +62,6 @@ class Getter
             }
 
             if (is_null($data->source)) {
-                // route\
                 $data->source = route('imageable.web.show', $imageFile);
             }
 
@@ -86,15 +83,22 @@ class Getter
         if (is_null($images)) {
             return null;
         }
+
         $images = $images
             ->imageFiles()
-            ->select('slug', 'disk', 'path', 'category', 'group', 'size_name', 'client_original_name');
+            ->select(
+                'slug',
+                'disk',
+                'path',
+                'category',
+                'group',
+                'size_name',
+                'client_original_name'
+            );
 
-        if (!is_null($this->_name)) {
-            $images = $images->where('size_name', $this->_name);
+        if (!is_null($this->_sizeName)) {
+            $images = $images->where('size_name', $this->_sizeName);
         }
-
-
 
         return $images->get();
     }

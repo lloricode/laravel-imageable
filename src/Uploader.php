@@ -78,7 +78,7 @@ class Uploader
 
         $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath, $imageModel) {
             foreach ($this->_each as $each) {
-                $filePath = $storagePath .'/'.  md5(
+                $filePath = $storagePath .'/'. $each['size_name'] . '-' . md5(
                     // implode('', $format).
                     get_class($this->_model) .
                     $this->_model->id .

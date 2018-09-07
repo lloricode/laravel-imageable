@@ -36,4 +36,12 @@ class Image extends Model
     {
         return $this->morphTo();
     }
+
+    public function delete()
+    {
+        foreach ($this->imageFiles as $imageFile) {
+            $imageFile->delete();
+        }
+        return parent::delete();
+    }
 }

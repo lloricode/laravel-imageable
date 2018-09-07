@@ -3,6 +3,7 @@
 namespace Lloricode\LaravelImageable\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ImageFile extends Model
 {
@@ -24,4 +25,13 @@ class ImageFile extends Model
         'disk',
         'client_original_name',
     ];
+
+
+    public function delete()
+    {
+        Storage::disk($this->disk)
+            ->delete($this->path);
+
+        return parent::delete();
+    }
 }

@@ -22,5 +22,6 @@ class ImageFile extends Model
         'path',
         'bytes',
         'disk',
+        'client_original_name',
     ];
 }

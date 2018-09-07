@@ -43,17 +43,26 @@ class Uploader
         return auth()->user(); // TODO: config
     }
 
+    private function _getModelImage():ImageModel
+    {
+        $image = $this->_model->images()->first();
+
+        if (is_null($image)) {
+            $user = $this->_getAuthUser();
+            return $this->_model->images()->create([
+                'user_id' => $user->id,
+            ]);
+        }
+        return $image;
+    }
 
     public function save() :ImageModel
     {
         $uploadedFiles = $this->_uploadedFiles;
 
-        $user = $this->_getAuthUser();
 
-        $imageModel = $this->_model->images()->create([
-            'user_id' => $user->id,
-        ]);
-        
+        $imageModel = $this->_getModelImage();
+
         $storagePath = $this->_storagePath();
 
         // check content types
@@ -84,7 +93,8 @@ class Uploader
                 $image = Image::load($filePath);
                 
                 $imageModel->imageFiles()->create([
-                    'size_name' => $each['name'],
+                    'client_original_name' => $uploadedFile->getClientOriginalName(),
+                    'size_name' => $each['size_name'],
                     'width' => $image->getWidth(),
                     'height' =>  $image->getHeight(),
                     'content_type' => $uploadedFile->getClientMimeType(),
@@ -162,7 +172,7 @@ class Uploader
     public function each(array $each):self
     {
         foreach ($each as $each_) {
-            foreach (['name', 'spatie'] as $key) {
+            foreach (['size_name', 'spatie'] as $key) {
                 throw_if(!array_key_exists($key, $each_), Exception::class, 'Invalid each parameter in ' . get_class($this) . '->each($each)');
             }
         }

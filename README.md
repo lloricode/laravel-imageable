@@ -47,7 +47,7 @@ class MyModel extends Model
            ->uploads($imageFiles) // must array, 
             ->each([
                 [
-                    'name' => 'banner' , // this will be use in calling image
+                    'size_name' => 'banner' , // this will be use in calling image
                     'spatie' => function ($image) {
 
                         $image // abstract of spatie/image https://github.com/spatie/image
@@ -59,7 +59,7 @@ class MyModel extends Model
                     },
                 ],
                 [
-                    'name' => 'thumbnail', // this will be use in calling image
+                    'size_name' => 'thumbnail', // this will be use in calling image
                     'spatie' => function ($image) {
                         
                         $image // abstract of spatie/image https://github.com/spatie/image
@@ -80,7 +80,7 @@ class MyModel extends Model
 - when `disk` is set to `public`, so meaning image is accessesible to the public forder.
 ```php
     # .. ->disk('public') 
-    $image = $myModel->getImages('banner'); // a name use when uploading,
+    $image = $myModel->getImages('banner'); // a size_name use when uploading,
     <img href={{ $image->src }} />
 ```
 - on private, it will need to make response

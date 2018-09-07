@@ -25,7 +25,7 @@ class TestUploaderPublic extends TestCase
             ])
             ->each([
                 [
-                    'name' => 'public_test',
+                    'size_name' => 'public_test',
                     'spatie' => function ($image) {
                         $image
                         ->optimize()
@@ -60,11 +60,16 @@ class TestUploaderPublic extends TestCase
         ]);
 
 
+        $images = $this->testModel->getImages('public_test');
 
-        $image = $this->testModel->getImages('public_test');
+        // check keys
+        $this->assertTrue(is_null($images[0]->category));
+        $this->assertEquals('public_test', $images[0]->size_name);
+        $this->assertEquals('default_group', $images[0]->group);
+        $this->assertEquals('avatar.jpg', $images[0]->client_original_name);
 
-        $this->assertFileExists(public_path(str_replace(config('app.url'), '', $image->src)));
-        // $this->get($image->src)
+        $this->assertFileExists(public_path(str_replace(config('app.url'), '', $images[0]->source)));
+        // $this->get($images[0]->source)
         // ->assertStatus(200);
     }
 }

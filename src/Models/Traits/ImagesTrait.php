@@ -18,9 +18,10 @@ trait ImageableTrait
         return new Uploader($this, $images);
     }
 
-    public function getImages($name, $group = null, $category = null)
+    public function getImages(string $name = null, string $group = null, string $category = null)
     {
-        $getter = new Getter($this, $name);
+        $getter = new Getter($this);
+        $getter->setName($name);
         // $getter->setGroup($group);
         // $getter->setCategory($category);
 

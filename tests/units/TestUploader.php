@@ -25,7 +25,7 @@ class TestUploader extends TestCase
             ])
             ->each([
                 [
-                    'name' => 'test default',
+                    'size_name' => 'test default',
                     'spatie' => function ($image) {
                         return $image;
                     },
@@ -67,7 +67,7 @@ class TestUploader extends TestCase
             ])
             ->each([
                 [
-                    'name' => 'test',
+                    'size_name' => 'test',
                     'spatie' => function ($image) {
                         $image
                         ->optimize()
@@ -115,7 +115,7 @@ class TestUploader extends TestCase
             ])
             ->each([
                 [
-                    'name' => 'test',
+                    'size_name' => 'test',
                     'spatie' => function ($image) {
                         $image
                         ->optimize()
@@ -160,7 +160,7 @@ class TestUploader extends TestCase
             ])
             ->each([
                 [
-                    'name' => 'test',
+                    'size_name' => 'test',
                      'spatie' => function ($image) {
                          $image
                         ->optimize()
@@ -203,7 +203,7 @@ class TestUploader extends TestCase
             ])
             ->each([
                 [
-                    'name' => 'test',
+                    'size_name' => 'test',
                     'spatie' => function ($image) {
                         $image
                         ->optimize()
@@ -261,7 +261,7 @@ class TestUploader extends TestCase
             ->uploads($_fakeImages)
             ->each([
                 [
-                    'name' => 'img1' ,
+                    'size_name' => 'img1' ,
                     'spatie' => function ($image) {
                         $image
                         ->optimize()
@@ -272,7 +272,7 @@ class TestUploader extends TestCase
                     },
                 ],
                 [
-                    'name' => 'img2',
+                    'size_name' => 'img2',
                     'spatie' => function ($image) {
                         $image
                         ->optimize()

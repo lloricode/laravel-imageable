@@ -13,7 +13,7 @@ trait ImageableTrait
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function uploads($images):Uploader
+    public function uploads(array $images):Uploader
     {
         return new Uploader($this, $images);
     }

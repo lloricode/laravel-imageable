@@ -41,7 +41,7 @@ class Uploader
 
     private function _getAuthUser()
     {
-        return auth()->user(); // TODO: config
+        return auth()->check() ? auth()->user() : null; // TODO: config
     }
 
     public function save()
@@ -78,7 +78,7 @@ class Uploader
                     $image = SpatieImage::load($filePath);
                 
                     $this->_model->images()->create([
-                        'user_id' => $this->_getAuthUser()->id,
+                        'user_id' => optional($this->_getAuthUser())->id,
                         'client_original_name' => $uploadedFile->getClientOriginalName(),
                         'size_name' => $each['size_name'],
                         'width' => $image->getWidth(),

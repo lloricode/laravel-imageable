@@ -5,6 +5,7 @@ namespace Lloricode\LaravelImageable\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Illuminate\Support\Facades\Config;
 
 class Image extends Model
 {
@@ -39,6 +40,12 @@ class Image extends Model
         'imageable_type',
         'user_id'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->setTable(Config::get('imageable.migration.table_name') ?: 'images');
+    }
     
     /**
     * Get the route key for the model.

@@ -44,7 +44,7 @@ class Image extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->setTable(Config::get('imageable.migration.table_name') ?: 'images');
+        $this->setTable(Config::get('imageable.migration.table_name', 'images'));
     }
     
     /**

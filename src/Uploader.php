@@ -9,6 +9,7 @@ use Spatie\Image\Image as SpatieImage;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cache;
 use DB;
 
 class Uploader
@@ -93,6 +94,9 @@ class Uploader
                     ]);
                 }
             });
+            if (Config::get('imageable.cache.enable') === true) {
+                Cache::forget($this->_model->getCachePrefix());
+            }
         });
     }
 

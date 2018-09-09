@@ -5,6 +5,7 @@ namespace Lloricode\LaravelImageable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class Getter
 {
@@ -33,11 +34,45 @@ class Getter
         $this->_category = $category;
     }
 
+    private function _cacheName()
+    {
+        $cacheName = '';
+        if (!is_null($this->_sizeName)) {
+            $cacheName .= strtolower($this->_sizeName) . '_';
+        }
+        if (!is_null($this->_category)) {
+            $cacheName .= strtolower($this->_category) . '_';
+        }
+        if (!is_null($this->_group)) {
+            $cacheName .= strtolower($this->_group) . '_';
+        }
+
+        return $this->_model->getCachePrefix() . '.' . trim($cacheName, '_');
+    }
+
+    private function _getFromCache()
+    {
+        $cacheName = $this->_cacheName();
+
+        if (Cache::has($cacheName)) {
+            $imageFiles = Cache::get($cacheName);
+        } else {
+            $imageFiles = $this->_getImage();
+            Cache::forever($cacheName, $imageFiles);
+        }
+
+        return $imageFiles;
+    }
+
     public function result():Collection
     {
         $return = collect([]);
-
-        $imageFiles = $this->_getImage();
+        
+        if (Config::get('imageable.cache.enable') === true) {
+            $imageFiles = $this->_getFromCache();
+        } else {
+            $imageFiles = $this->_getImage();
+        }
 
         if (is_null($imageFiles)) {
             return $return;
@@ -86,7 +121,7 @@ class Getter
                 'size_name',
                 'client_original_name'
             );
-
+            
         if (!is_null($this->_sizeName)) {
             $images = $images->where('size_name', $this->_sizeName);
         }

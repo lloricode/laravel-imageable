@@ -58,6 +58,9 @@ class Getter
             $imageFiles = Cache::get($cacheName);
         } else {
             $imageFiles = $this->_getImage();
+            if (is_null($imageFiles)) {
+                $imageFiles = [];
+            }
             Cache::forever($cacheName, $imageFiles);
         }
 
@@ -74,7 +77,7 @@ class Getter
             $imageFiles = $this->_getImage();
         }
 
-        if (is_null($imageFiles)) {
+        if (empty($imageFiles)) {
             return $return;
         }
 

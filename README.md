@@ -8,6 +8,10 @@ Painless uploading and managing images to your eloquent laravel models.
 
 
 
+## Requirements
+    - CACHE_DRIVER=memcached (you can disable cache when need it)
+
+
 ## Installation
 
 ```

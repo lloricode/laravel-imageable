@@ -4,7 +4,8 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lloricode/laravel-imageable.svg)](https://packagist.org/packages/lloricode/laravel-imageable) [![Build Status](https://travis-ci.org/lloricode/laravel-imageable.svg?branch=develop)](https://travis-ci.org/lloricode/laravel-imageable) [![Total Downloads](https://img.shields.io/packagist/dt/lloricode/laravel-imageable.svg)](https://packagist.org/packages/lloricode/laravel-imageable)
 
 
-Painless uploading and managing images to your eloquent laravel models.
+- Painless uploading and managing images to your eloquent laravel models.
+- Abstract of [Spatie Image](https://github.com/spatie/image)
 
 
 

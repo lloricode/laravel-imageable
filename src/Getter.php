@@ -99,25 +99,25 @@ class Getter
         }
 
         if (Config::get('imageable.cache.enable') === true) {
-            return $images->rememberForever($this->_cacheName())->get();
+            return $images->rememberForever()->cacheTags($this->_model->getCachePrefix())->get();
         }
             
         return $images->get();
     }
 
-    private function _cacheName()
-    {
-        $cacheName = '';
-        if (!is_null($this->_sizeName)) {
-            $cacheName .= strtolower($this->_sizeName) . '_';
-        }
-        if (!is_null($this->_category)) {
-            $cacheName .= strtolower($this->_category) . '_';
-        }
-        if (!is_null($this->_group)) {
-            $cacheName .= strtolower($this->_group) . '_';
-        }
+    // private function _cacheName()
+    // {
+    //     $cacheName = '';
+    //     if (!is_null($this->_sizeName)) {
+    //         $cacheName .= strtolower($this->_sizeName) . '_';
+    //     }
+    //     if (!is_null($this->_category)) {
+    //         $cacheName .= strtolower($this->_category) . '_';
+    //     }
+    //     if (!is_null($this->_group)) {
+    //         $cacheName .= strtolower($this->_group) . '_';
+    //     }
 
-        return $this->_model->getCachePrefix() . '_' . trim($cacheName, '_');
-    }
+    //     return $this->_model->getCachePrefix() . '_' . trim($cacheName, '_');
+    // }
 }

@@ -1,5 +1,4 @@
 # Laravel Imageable 
-### [STILL ON DEVELOPING]
 
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lloricode/laravel-imageable.svg)](https://packagist.org/packages/lloricode/laravel-imageable) [![Build Status](https://travis-ci.org/lloricode/laravel-imageable.svg?branch=develop)](https://travis-ci.org/lloricode/laravel-imageable) [![Total Downloads](https://img.shields.io/packagist/dt/lloricode/laravel-imageable.svg)](https://packagist.org/packages/lloricode/laravel-imageable)
@@ -70,7 +69,7 @@ class MyModel extends Model
                     },
                 ],
             ])
-            ->contentTypes(['image/png','image/jpg'])
+            ->contentTypes(['image/png','image/jpg','image/jpeg'])
             ->disk('public') // any disk in config('filesystem) except cloud
             ->category('banner') // optional
             ->save(); // save mutiple 
@@ -82,40 +81,38 @@ class MyModel extends Model
     $images = $myModel->getImages('banner'); // a size_name use when uploading,
     <img href={{ $images[0]->source }} />
 ```
-- the `images` result:
+- the `images` result of `$myModel->getImages()`
 ```
-Collection {#3056 ▼
-  #items: array:12 [▼
-    0 => {#3285 ▼
-      +"size_name": "large"
-      +"category": null
-      +"group": "slide_1"
-      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
-      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
+Illuminate\Support\Collection {#2947
+  #items: array:4 [
+    0 => {#2948
+      +"size_name": "banner"
+      +"category": "banner"
+      +"group": "first_image"
+      +"client_original_name": "avatar.jpg"
+      +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/banner-43faf04b2c2b6cbf05c49b76cd6b7290.jpg"
     }
-    1 => {#3286 ▼
-      +"size_name": "medium"
-      +"category": null
-      +"group": "slide_1"
-      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
-      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
-    }
-    2 => {#3287 ▼
+    1 => {#2946
       +"size_name": "thumbnail"
-      +"category": null
-      +"group": "slide_1"
-      +"client_original_name": "311337cbf023c814fd060836399f7cab--minecraft-templates-pixel-art-templates.jpg"
-      +"source": "http://core-boilerplate.test/storage/images/slide/c4ca4238a0b923820dcc509a6f75849b/d49c1886c1582a9372ab8febe263ecc7.jpg"
+      +"category": "banner"
+      +"group": "first_image"
+      +"client_original_name": "avatar.jpg"
+      +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/thumbnail-43faf04b2c2b6cbf05c49b76cd6b7290.jpg"
     }
-    3 => {#3288 ▶}
-    4 => {#3289 ▶}
-    5 => {#3290 ▶}
-    6 => {#3291 ▶}
-    7 => {#3292 ▶}
-    8 => {#3293 ▶}
-    9 => {#3294 ▶}
-    10 => {#3295 ▶}
-    11 => {#3296 ▶}
+    2 => {#2963
+      +"size_name": "banner"
+      +"category": "banner"
+      +"group": "second_image"
+      +"client_original_name": "avatar.jpg"
+      +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/banner-778f3ef046040aafa2c71d803a5e41ba.jpg"
+    }
+    3 => {#2994
+      +"size_name": "thumbnail"
+      +"category": "banner"
+      +"group": "second_image"
+      +"client_original_name": "avatar.jpg"
+      +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/thumbnail-778f3ef046040aafa2c71d803a5e41ba.jpg"
+    }
   ]
 }
 ```

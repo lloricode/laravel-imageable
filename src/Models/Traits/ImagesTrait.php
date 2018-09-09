@@ -36,6 +36,6 @@ trait ImageableTrait
         foreach (explode('\\', get_class($this)) as $exploded) {
             $names[] = str_replace('-', '_', kebab_case($exploded));
         }
-        return Config::get('imageable.cache.prefix') . '_' . implode('_', $names) . '_' . $this->id;
+        return Config::get('imageable.cache.prefix') . '_' . implode('_', $names) . '_' . $this->id . '_queries';
     }
 }

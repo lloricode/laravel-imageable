@@ -34,48 +34,11 @@ class Getter
         $this->_category = $category;
     }
 
-    private function _cacheName()
-    {
-        $cacheName = '';
-        if (!is_null($this->_sizeName)) {
-            $cacheName .= strtolower($this->_sizeName) . '_';
-        }
-        if (!is_null($this->_category)) {
-            $cacheName .= strtolower($this->_category) . '_';
-        }
-        if (!is_null($this->_group)) {
-            $cacheName .= strtolower($this->_group) . '_';
-        }
-
-        return $this->_model->getCachePrefix() . '.' . trim($cacheName, '_');
-    }
-
-    private function _getFromCache()
-    {
-        $cacheName = $this->_cacheName();
-
-        if (Cache::has($cacheName)) {
-            $imageFiles = Cache::get($cacheName);
-        } else {
-            $imageFiles = $this->_getImage();
-            if (is_null($imageFiles)) {
-                $imageFiles = [];
-            }
-            Cache::forever($cacheName, $imageFiles);
-        }
-
-        return $imageFiles;
-    }
-
     public function result():Collection
     {
         $return = collect([]);
         
-        if (Config::get('imageable.cache.enable') === true) {
-            $imageFiles = $this->_getFromCache();
-        } else {
-            $imageFiles = $this->_getImage();
-        }
+        $imageFiles = $this->_getImage();
 
         if (empty($imageFiles)) {
             return $return;
@@ -135,6 +98,26 @@ class Getter
             $images = $images->where('group', $this->_group);
         }
 
+        if (Config::get('imageable.cache.enable') === true) {
+            return $images->rememberForever($this->_cacheName())->get();
+        }
+            
         return $images->get();
+    }
+
+    private function _cacheName()
+    {
+        $cacheName = '';
+        if (!is_null($this->_sizeName)) {
+            $cacheName .= strtolower($this->_sizeName) . '_';
+        }
+        if (!is_null($this->_category)) {
+            $cacheName .= strtolower($this->_category) . '_';
+        }
+        if (!is_null($this->_group)) {
+            $cacheName .= strtolower($this->_group) . '_';
+        }
+
+        return $this->_model->getCachePrefix() . '_' . trim($cacheName, '_');
     }
 }

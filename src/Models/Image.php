@@ -5,11 +5,13 @@ namespace Lloricode\LaravelImageable\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Watson\Rememberable\Rememberable;
 use Illuminate\Support\Facades\Config;
 
 class Image extends Model
 {
     use HasSlug;
+    use Rememberable;
 
     const UPDATED_AT = null;
     const PATH_FOLDER = 'imageable';

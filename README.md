@@ -77,9 +77,8 @@ class MyModel extends Model
 
 ### Getter
 ```php
-    # .. ->disk('public') 
-    $images = $myModel->getImages('banner'); // a size_name use when uploading,
-    <img href={{ $images[0]->source }} />
+    $images = $myModel->getImages('banner', $category = null, $group = null); // a size_name use when uploading,
+    <img href={{ $images->first()->source }} />
 ```
 - the `images` result of `$myModel->getImages()`
 ```

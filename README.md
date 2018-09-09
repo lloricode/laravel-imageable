@@ -28,6 +28,24 @@ class MyModel extends Model
     
 
 ```
+- Config
+```php
+<?php
+
+return [
+
+
+    'migration' => [
+        'table_name' => 'images',
+    ],
+
+    'cache' => [
+        'enable' => true,
+        'prefix' => 'imageable',
+    ],
+];
+
+```
 ## Usage
 ```php
 

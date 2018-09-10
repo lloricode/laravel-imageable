@@ -112,6 +112,7 @@ Illuminate\Support\Collection {#2947
       +"category": "banner"
       +"group": "first_image"
       +"client_original_name": "avatar.jpg"
+      +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/banner-43faf04b2c2b6cbf05c49b76cd6b7290.jpg"
     }
     1 => {#2946
@@ -119,6 +120,7 @@ Illuminate\Support\Collection {#2947
       +"category": "banner"
       +"group": "first_image"
       +"client_original_name": "avatar.jpg"
+      +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/thumbnail-43faf04b2c2b6cbf05c49b76cd6b7290.jpg"
     }
     2 => {#2963
@@ -126,6 +128,7 @@ Illuminate\Support\Collection {#2947
       +"category": "banner"
       +"group": "second_image"
       +"client_original_name": "avatar.jpg"
+      +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/banner-778f3ef046040aafa2c71d803a5e41ba.jpg"
     }
     3 => {#2994
@@ -133,6 +136,7 @@ Illuminate\Support\Collection {#2947
       +"category": "banner"
       +"group": "second_image"
       +"client_original_name": "avatar.jpg"
+      +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/thumbnail-778f3ef046040aafa2c71d803a5e41ba.jpg"
     }
   ]

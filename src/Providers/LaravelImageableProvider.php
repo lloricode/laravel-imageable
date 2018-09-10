@@ -12,9 +12,18 @@ class LaravelImageableProvider extends ServiceProvider
     */
     public function boot()
     {
-        //
+        if (! class_exists('CreateImageablesTable')) {
+
+            // Publish Image Config
+            $this->publishes([ __DIR__.'/../../config/imageable.php' => config_path('imageable.php'), ]);
+
+            $timestamp = date('Y_m_d_His', time());
+            $this->publishes([
+                __DIR__.'/../../database/migrations/migration.stub' => $this->app->databasePath()."/migrations/{$timestamp}_create_imageables_table.php",
+            ], 'migrations');
+        }
     }
-    
+
     /**
     * Register the application services.
     *
@@ -22,6 +31,6 @@ class LaravelImageableProvider extends ServiceProvider
     */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(__DIR__.'/../../config/imageable.php', 'imageable');
     }
 }

@@ -59,13 +59,18 @@ class TestUploaderPublic extends TestCase
         $images = $this->testModel->getImages('public_test');
 
         // check keys
-        $this->assertTrue(is_null($images[0]->category));
-        $this->assertEquals('public_test', $images[0]->size_name);
-        $this->assertEquals('default_group', $images[0]->group);
-        $this->assertEquals('avatar.jpg', $images[0]->client_original_name);
+        $this->assertTrue(is_null($images->first()->category));
+        $this->assertEquals('public_test', $images->first()->size_name);
+        $this->assertEquals('default_group', $images->first()->group);
+        $this->assertEquals('avatar.jpg', $images->first()->client_original_name);
 
-        $this->assertFileExists(public_path(str_replace(config('app.url'), '', $images[0]->source)));
-        // $this->get($images[0]->source)
+        $this->assertFileExists(public_path(str_replace(config('app.url'), '', $images->first()->source)));
+        // $this->get($images->first()->source)
         // ->assertStatus(200);
+
+        $response = $this->call('DELETE', $images->first()->source_delete);
+
+        $this->assertEquals(204, $response->getStatusCode());
+        $this->assertFileNotExists(public_path(str_replace(config('app.url'), '', $images->first()->source)));
     }
 }

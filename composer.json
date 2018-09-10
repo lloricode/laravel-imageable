@@ -48,6 +48,9 @@
         "format": [
             "./vendor/bin/php-cs-fixer fix src/  --show-progress=estimating",
             "./vendor/bin/php-cs-fixer fix tests/  --show-progress=estimating"
+        ],
+        "phpunit": [
+            "./vendor/bin/phpunit --verbose > output.txt -d memory_limit=2048M"
         ]
     }
 }

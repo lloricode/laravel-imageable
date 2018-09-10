@@ -25,5 +25,6 @@
     <php>
         <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
         <env name="APP_URL" value="http://localhost"/>
+        <env name="APP_DEBUG" value="true"/>
     </php>
 </phpunit>

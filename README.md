@@ -49,7 +49,14 @@ return [
         'prefix' => 'imageable',
     ],
 ];
-
+```
+- add this to your `DatabaseSeeder` to delete all test file in your storage while seeding data.
+```php
+   use Lloricode\LaravelImageable\Models\Image;
+        
+    $folder = Image::PATH_FOLDER .'/';
+    Storage::disk('local')->deleteDirectory($folder);
+    Storage::disk('public')->deleteDirectory($folder);
 ```
 ## Usage
 ```php

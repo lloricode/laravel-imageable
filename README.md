@@ -64,12 +64,8 @@ return [
         // files to be upload 
         $imageFiles = [
             // group => instance of \Illuminate\Http\UploadedFile
-            [
-                'first_image' => $imageFile1,
-            ],
-            [
-                'second_image' => $imageFile2,
-            ],
+            'first_image' => $imageFile1,
+            'second_image' => $imageFile2,
         ];
 
        $myModel

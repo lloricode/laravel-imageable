@@ -148,8 +148,9 @@ Illuminate\Support\Collection {#2947
 - Delete
   ```php
 $myModel->deleteImages($size_name = null, $category = null, $group = null);
+```
 
 # via http delete
 # using `source_delete` return from collection
 
-  ```
+  

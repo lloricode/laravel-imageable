@@ -103,7 +103,7 @@ return [
 
 ### Getter
 ```php
-    $images = $myModel->getImages('banner', $category = null, $group = null); // a size_name use when uploading,
+    $images = $myModel->getImages($size_name = null, $category = null, $group = null); // a size_name use when uploading,
     <img href={{ $images->first()->source }} />
 ```
 - the `images` result of `$myModel->getImages()`
@@ -145,3 +145,11 @@ Illuminate\Support\Collection {#2947
   ]
 }
 ```
+- Delete
+  ```php
+$myModel->deleteImages($size_name = null, $category = null, $group = null);
+
+# via http delete
+# using `source_delete` return from collection
+
+  ```

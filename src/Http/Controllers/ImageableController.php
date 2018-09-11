@@ -22,6 +22,11 @@ class ImageableController extends Controller
     {
         // TODO: check policy
         $image->delete();
+
+        if (Config::get('imageable.cache.enable') === true) {
+            Image::flushCache($image->imageable->getCachePrefix());
+        }
+        
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

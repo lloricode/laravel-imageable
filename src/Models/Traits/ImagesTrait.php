@@ -7,6 +7,7 @@ use Lloricode\LaravelImageable\Getter;
 use Lloricode\LaravelImageable\Models\Image;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use DB;
 
 trait ImageableTrait
 {
@@ -37,5 +38,21 @@ trait ImageableTrait
             $names[] = str_replace('-', '_', kebab_case($exploded));
         }
         return Config::get('imageable.cache.prefix') . '_' . implode('_', $names) . '_' . $this->id . '_queries';
+    }
+
+    public function deleteImages(string $name = null, string $category = null, string $group = null)
+    {
+        DB::transaction(function () use ($name, $category, $group) {
+            $this->getImages($name, $category, $group)
+                ->map(function ($image) {
+                    $image = $this->images()
+                        ->where('slug', $image->slug)->first();
+
+                    if (Config::get('imageable.cache.enable') === true) {
+                        Image::flushCache($image->imageable->getCachePrefix());
+                    }
+                    $image->delete();
+                });
+        });
     }
 }

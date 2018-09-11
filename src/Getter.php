@@ -53,6 +53,7 @@ class Getter
             $data->category = $imageFile->category;
             $data->group = $imageFile->group;
             $data->client_original_name = $imageFile->client_original_name;
+            $data->slug = $imageFile->slug;
             $data->source_delete = route('imageable.web.delete', $imageFile);
             $data->source = null;
             

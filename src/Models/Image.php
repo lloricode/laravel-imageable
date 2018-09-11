@@ -75,11 +75,14 @@ class Image extends Model
         return $this->morphTo();
     }
 
-    public function delete()
-    {
-        Storage::disk($this->disk)
-            ->delete($this->path);
+  
 
-        return parent::delete();
+    public static function boot()
+    {
+        parent::boot();
+        static::deleted(function ($image) {
+            Storage::disk($image->disk)
+                ->delete($image->path);
+        });
     }
 }

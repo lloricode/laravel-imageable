@@ -49,7 +49,14 @@ return [
         'prefix' => 'imageable',
     ],
 ];
-
+```
+- add this to your `DatabaseSeeder` to delete all test file in your storage while seeding data.
+```php
+   use Lloricode\LaravelImageable\Models\Image;
+        
+    $folder = Image::PATH_FOLDER .'/';
+    Storage::disk('local')->deleteDirectory($folder);
+    Storage::disk('public')->deleteDirectory($folder);
 ```
 ## Usage
 ```php
@@ -57,12 +64,8 @@ return [
         // files to be upload 
         $imageFiles = [
             // group => instance of \Illuminate\Http\UploadedFile
-            [
-                'first_image' => $imageFile1,
-            ],
-            [
-                'second_image' => $imageFile2,
-            ],
+            'first_image' => $imageFile1,
+            'second_image' => $imageFile2,
         ];
 
        $myModel
@@ -100,7 +103,7 @@ return [
 
 ### Getter
 ```php
-    $images = $myModel->getImages('banner', $category = null, $group = null); // a size_name use when uploading,
+    $images = $myModel->getImages($size_name = null, $category = null, $group = null); // a size_name use when uploading,
     <img href={{ $images->first()->source }} />
 ```
 - the `images` result of `$myModel->getImages()`
@@ -142,3 +145,11 @@ Illuminate\Support\Collection {#2947
   ]
 }
 ```
+- Delete
+  ```php
+$myModel->deleteImages($size_name = null, $category = null, $group = null);
+
+# via http delete
+# using `source_delete` return from collection
+
+  ```

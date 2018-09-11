@@ -52,12 +52,12 @@ class Uploader
         $storagePath = $this->_storagePath();
 
         // check content types
-        if (!is_null($this->_contentTypes)) {
+        if (!empty($this->_contentTypes)) {
             $uploadedFiles->map(function ($uploadedFile, $key) {
                 throw_if(
-                    !in_array($uploadedFile->getClientMimeType(), $this->_contentTypes),
+                    !in_array($uploadedFile->getMimeType(), $this->_contentTypes),
                     Exception::class,
-                    'Invalid content type it must [ '. implode(', ', $this->_contentTypes) .' ].'
+                    'Invalid content type it must ['. implode(', ', $this->_contentTypes) .'], ' .  $uploadedFile->getMimeType() . ' given.'
                 );
             });
         }
@@ -84,7 +84,7 @@ class Uploader
                         'size_name' => $each['size_name'],
                         'width' => $image->getWidth(),
                         'height' =>  $image->getHeight(),
-                        'content_type' => $uploadedFile->getClientMimeType(),
+                        'content_type' => $uploadedFile->getMimeType(),
                         'extension' => $uploadedFile->getClientOriginalExtension(),
                         'path' => str_replace($this->_storageDiskPath(), '', $filePath),
                         'bytes' => $uploadedFile->getClientSize(),

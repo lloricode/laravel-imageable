@@ -21,10 +21,12 @@ class ImageableController extends Controller
 
     public function delete(Image $image)
     {
-        $image->imageable->deleteImages(null, $image->category, $image->group);
+        $imageable = $image->imageable;
+
+        $imageable->deleteImages(null, $image->category, $image->group);
 
         if (Config::get('imageable.cache.enable') === true) {
-            Image::flushCache($image->imageable->getCachePrefix());
+            Image::flushCache($imageable->getCachePrefix());
         }
         
         return response()->json([], Response::HTTP_NO_CONTENT);

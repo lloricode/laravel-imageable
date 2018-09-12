@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use Lloricode\LaravelImageable\Models\Image;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
+use DB;
 
 class ImageableController extends Controller
 {
@@ -20,8 +21,7 @@ class ImageableController extends Controller
 
     public function delete(Image $image)
     {
-        // TODO: check policy
-        $image->delete();
+        $image->imageable->deleteImages(null, $image->category, $image->group);
 
         if (Config::get('imageable.cache.enable') === true) {
             Image::flushCache($image->imageable->getCachePrefix());

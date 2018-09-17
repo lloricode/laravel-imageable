@@ -71,22 +71,41 @@ class Uploader
                     $this->_now->format('Ymdhis') .
                     $this->_category.
                     $group
-                ) . '.' . $uploadedFile->getClientOriginalExtension();
+                ) . '.';
                                
-                    $each['spatie'](SpatieImage::load($uploadedFile))
-                    ->save($filePath);
+                    $toBeUpload = $each['spatie'](SpatieImage::load($uploadedFile));
 
-                    $image = SpatieImage::load($filePath);
-                
+                    $manipulations = $toBeUpload->getManipulationSequence();
+
+                    $mimeType = $uploadedFile->getMimeType();
+                    $fileExtension = $uploadedFile->getClientOriginalExtension();
+
+                    $isCustomFormat = false;
+                    if (!empty($manipulations->toArray()[0]['format'])) {
+                        $fileExtension = $manipulations->toArray()[0]['format'];
+                        $isCustomFormat=true;
+                    }
+
+                    $fullFilePath = $filePath.$fileExtension;
+
+                    $toBeUpload
+                    ->save($fullFilePath);
+
+                    if ($isCustomFormat) {
+                        $mimeType = mime_content_type($filePath.$fileExtension);
+                    }
+
+                    $image = SpatieImage::load($fullFilePath);
+
                     $this->_model->images()->create([
                         'user_id' => optional($this->_getAuthUser())->id,
                         'client_original_name' => $uploadedFile->getClientOriginalName(),
                         'size_name' => $each['size_name'],
                         'width' => $image->getWidth(),
-                        'height' =>  $image->getHeight(),
-                        'content_type' => $uploadedFile->getMimeType(),
-                        'extension' => $uploadedFile->getClientOriginalExtension(),
-                        'path' => str_replace($this->_storageDiskPath(), '', $filePath),
+                        'height' => $image->getHeight(),
+                        'content_type' => $mimeType,
+                        'extension' => $fileExtension,
+                        'path' => str_replace($this->_storageDiskPath(), '', $fullFilePath),
                         'bytes' => $uploadedFile->getClientSize(),
                         'disk' => $this->_disk,
                         'category' => $this->_category,

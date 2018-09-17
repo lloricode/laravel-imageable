@@ -92,7 +92,7 @@ class Uploader
                     ->save($fullFilePath);
 
                     if ($isCustomFormat) {
-                        $mimeType = mime_content_type($filePath.$fileExtension);
+                        $mimeType = mime_content_type($fullFilePath);
                     }
 
                     $image = SpatieImage::load($fullFilePath);

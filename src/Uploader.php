@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cache;
 use DB;
+use Lloricode\LaravelImageable\Exceptions\InvalidMimeTypeException;
 
 class Uploader
 {
@@ -56,7 +57,7 @@ class Uploader
             $uploadedFiles->map(function ($uploadedFile, $key) {
                 throw_if(
                     !in_array($uploadedFile->getMimeType(), $this->_contentTypes),
-                    Exception::class,
+                    InvalidMimeTypeException::class,
                     'Invalid content type it must ['. implode(', ', $this->_contentTypes) .'], ' .  $uploadedFile->getMimeType() . ' given.'
                 );
             });

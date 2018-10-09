@@ -68,7 +68,11 @@ class Image extends Model
     {
         parent::boot();
         static::creating(function ($image) {
-            $image->slug = str_slug("{$image->size_name} {$image->width} {$image->height} {$image->group} {$image->category}");
+            $slug = str_slug("{$image->size_name} {$image->width} {$image->height} {$image->group} {$image->category}");
+
+            $count = self::where('slug', 'like', $slug . '%')->count() + 1;
+
+            $image->slug = "$slug-$count";
         });
         static::deleted(function ($image) {
             Storage::disk($image->disk)

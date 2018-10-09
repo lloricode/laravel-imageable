@@ -2,7 +2,6 @@
 namespace Lloricode\LaravelImageable\Tests\Units;
 
 use Lloricode\LaravelImageable\Tests\TestCase;
-use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
 use Lloricode\LaravelImageable\Models\Image;
 use Spatie\Image\Manipulations;
 

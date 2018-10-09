@@ -3,15 +3,12 @@
 namespace Lloricode\LaravelImageable\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 use Watson\Rememberable\Rememberable;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
-    use HasSlug;
     use Rememberable;
 
     const UPDATED_AT = null;
@@ -60,16 +57,6 @@ class Image extends Model
         return 'slug';
     }
 
-    /**
-     * Get the options for generating the slug.
-     */
-    public function getSlugOptions() : SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom(['size_name', 'width', 'height'])
-            ->saveSlugsTo('slug');
-    }
-
     public function imageable()
     {
         return $this->morphTo();
@@ -80,6 +67,9 @@ class Image extends Model
     public static function boot()
     {
         parent::boot();
+        static::creating(function ($image) {
+            $image->slug = str_slug("{$image->size_name} {$image->width} {$image->height} {$image->group} {$image->category}");
+        });
         static::deleted(function ($image) {
             Storage::disk($image->disk)
                 ->delete($image->path);

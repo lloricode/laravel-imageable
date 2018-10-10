@@ -109,6 +109,10 @@ class Getter
             $sql = $this->_multiImplode(',', $sql);
             $sql = str_replace(' ', '', $sql);
 
+            if (Cache::has($sql)) {
+                return Cache::get($sql);
+            }
+
             Cache::tags($this->_model->getCachePrefix())->forever($sql, $data);
             return $data;
         }
@@ -118,14 +122,14 @@ class Getter
 
     private function _multiImplode($glue, $array)
     {
-        $ret = '';    
+        $ret = '';
         foreach ($array as $item) {
             if (is_array($item)) {
                 $ret .= $this->_multiImplode($glue, $item) . $glue;
             } else {
                 $ret .= $item . $glue;
             }
-        }    
+        }
         $ret = substr($ret, 0, 0-strlen($glue));
     
         return $ret;

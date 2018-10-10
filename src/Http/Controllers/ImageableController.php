@@ -7,6 +7,7 @@ use Lloricode\LaravelImageable\Models\Image;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 use DB;
+use Illuminate\Support\Facades\Cache;
 
 class ImageableController extends Controller
 {
@@ -26,7 +27,7 @@ class ImageableController extends Controller
         $imageable->deleteImages(null, $image->category, $image->group);
 
         if (Config::get('imageable.cache.enable') === true) {
-            Image::flushCache($imageable->getCachePrefix());
+            Cache::tags($imageable->getCachePrefix())->flush();
         }
         
         return response()->json([], Response::HTTP_NO_CONTENT);

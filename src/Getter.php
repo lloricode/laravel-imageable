@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use DB;
 
 class Getter
 {
@@ -101,10 +102,33 @@ class Getter
         }
 
         if (Config::get('imageable.cache.enable') === true) {
-            return $images->rememberForever()->cacheTags($this->_model->getCachePrefix())->get();
+            \DB::enableQueryLog();
+            $data = $images->get();
+
+            $sql = DB::getQueryLog();
+            $sql = $this->_multiImplode(',', $sql);
+            $sql = str_replace(' ', '', $sql);
+
+            Cache::tags($this->_model->getCachePrefix())->forever($sql, $data);
+            return $data;
         }
             
         return $images->get();
+    }
+
+    private function _multiImplode($glue, $array)
+    {
+        $ret = '';    
+        foreach ($array as $item) {
+            if (is_array($item)) {
+                $ret .= $this->_multiImplode($glue, $item) . $glue;
+            } else {
+                $ret .= $item . $glue;
+            }
+        }    
+        $ret = substr($ret, 0, 0-strlen($glue));
+    
+        return $ret;
     }
 
     // private function _cacheName()

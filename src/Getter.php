@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use DB;
 
 class Getter
 {
@@ -90,30 +89,37 @@ class Getter
                 'size_name',
                 'client_original_name'
             );
-            
+        
+        $cacheName = '';
+        foreach (explode('\\', get_class($this->_model)) as $exploded) {
+            $cacheName .= '-' . str_replace('-', '_', kebab_case($exploded));
+        }
+
+        $cacheName .= '-' . $this->_model->id;
+
         if (!is_null($this->_sizeName)) {
             $images = $images->where('size_name', $this->_sizeName);
+            $cacheName .= '-' . $this->_sizeName;
         }
         if (!is_null($this->_category)) {
             $images = $images->where('category', $this->_category);
+            $cacheName .= '-' . $this->_category;
         }
         if (!is_null($this->_group)) {
             $images = $images->where('group', $this->_group);
+            $cacheName .= '-' . $this->_group;
         }
 
+        $cacheName = str_replace('_', '-', $cacheName);
+
         if (Config::get('imageable.cache.enable') === true) {
-            \DB::enableQueryLog();
-            $data = $images->get();
-
-            $sql = DB::getQueryLog();
-            $sql = $this->_multiImplode(',', $sql);
-            $sql = str_replace(' ', '', $sql);
-
-            if (Cache::has($sql)) {
-                return Cache::get($sql);
+            if (Cache::tags($this->_model->getCachePrefix())->has($cacheName)) {
+                return Cache::tags($this->_model->getCachePrefix())->get($cacheName);
             }
 
-            Cache::tags($this->_model->getCachePrefix())->forever($sql, $data);
+            $data = $images->get();
+
+            Cache::tags($this->_model->getCachePrefix())->forever($cacheName, $data);
             return $data;
         }
             

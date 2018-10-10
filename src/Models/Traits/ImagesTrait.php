@@ -7,6 +7,7 @@ use Lloricode\LaravelImageable\Getter;
 use Lloricode\LaravelImageable\Models\Image;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cache;
 use DB;
 
 trait ImageableTrait
@@ -49,7 +50,7 @@ trait ImageableTrait
                         ->where('slug', $image->slug)->first();
 
                     if (Config::get('imageable.cache.enable') === true) {
-                        Image::flushCache($image->imageable->getCachePrefix());
+                        Cache::tags($image->imageable->getCachePrefix())->flush();
                     }
                     $image->delete();
                 });

@@ -3,13 +3,13 @@
 namespace Lloricode\LaravelImageable\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Watson\Rememberable\Rememberable;
+// use Watson\Rememberable\Rememberable;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
-    use Rememberable;
+    // use Rememberable;
 
     const UPDATED_AT = null;
     const PATH_FOLDER = 'imageable';

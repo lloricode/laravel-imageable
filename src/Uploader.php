@@ -115,7 +115,8 @@ class Uploader
                 }
             });
             if (Config::get('imageable.cache.enable') === true) {
-                ImageModel::flushCache($this->_model->getCachePrefix());
+                // ImageModel::flushCache($this->_model->getCachePrefix());
+                Cache::tags($this->_model->getCachePrefix())->flush();
             }
         });
     }

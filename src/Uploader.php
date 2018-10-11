@@ -107,7 +107,7 @@ class Uploader
                         'content_type' => $mimeType,
                         'extension' => $fileExtension,
                         'path' => str_replace($this->_storageDiskPath(), '', $fullFilePath),
-                        'bytes' => $uploadedFile->getClientSize(),
+                        'bytes' => $uploadedFile->getClientSize() ?: 0,
                         'disk' => $this->_disk,
                         'category' => $this->_category,
                         'group' => $group,

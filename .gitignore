@@ -3,3 +3,4 @@
 /.vscode
 output.txt
 .php_cs.cache
+/.idea

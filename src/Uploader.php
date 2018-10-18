@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cache;
 use DB;
+use Lloricode\LaravelImageable\Exceptions\InvalidMimeTypeException;
 
 class Uploader
 {
@@ -56,7 +57,7 @@ class Uploader
             $uploadedFiles->map(function ($uploadedFile, $key) {
                 throw_if(
                     !in_array($uploadedFile->getMimeType(), $this->_contentTypes),
-                    Exception::class,
+                    InvalidMimeTypeException::class,
                     'Invalid content type it must ['. implode(', ', $this->_contentTypes) .'], ' .  $uploadedFile->getMimeType() . ' given.'
                 );
             });
@@ -106,7 +107,7 @@ class Uploader
                         'content_type' => $mimeType,
                         'extension' => $fileExtension,
                         'path' => str_replace($this->_storageDiskPath(), '', $fullFilePath),
-                        'bytes' => $uploadedFile->getClientSize(),
+                        'bytes' => $uploadedFile->getClientSize() ?: 0,
                         'disk' => $this->_disk,
                         'category' => $this->_category,
                         'group' => $group,
@@ -114,7 +115,8 @@ class Uploader
                 }
             });
             if (Config::get('imageable.cache.enable') === true) {
-                ImageModel::flushCache($this->_model->getCachePrefix());
+                // ImageModel::flushCache($this->_model->getCachePrefix());
+                Cache::tags($this->_model->getCachePrefix())->flush();
             }
         });
     }

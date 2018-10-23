@@ -5,7 +5,7 @@
 
 
 - Painless uploading and managing images to your eloquent laravel models.
-- Abstract of [Spatie Image](https://github.com/spatie/image)
+> **Note:** This project abstracts [Spatie Image](https://github.com/spatie/image)
 
 
 

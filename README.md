@@ -68,17 +68,14 @@ return [
             'second_image' => $imageFile2,
         ];
 
-       $myModel
-           ->uploads($imageFiles) // must array, 
+        $myModel->uploads($imageFiles)// must array, 
             ->each([
                 [
-                    'size_name' => 'banner' , // this will be use in calling image
+                    'size_name' => 'banner', // this will be use in calling image
                     'spatie' => function ($image) {
 
-                        $image // abstract of spatie/image https://github.com/spatie/image
-                            ->optimize()
-                            ->width(100)
-                            -> // ....
+                        $image// abstract of spatie/image https://github.com/spatie/image
+                        ->optimize()->width(100)-> // ....
 
                         return $image;
                     },
@@ -86,18 +83,19 @@ return [
                 [
                     'size_name' => 'thumbnail', // this will be use in calling image
                     'spatie' => function ($image) {
-                        
-                        $image // abstract of spatie/image https://github.com/spatie/image
-                         ->greyscale()
-                         -> // ....
+
+                        $image// abstract of spatie/image https://github.com/spatie/image
+                        ->greyscale()-> // ....
 
                         return $image;
                     },
                 ],
-            ])
-            ->contentTypes(['image/png','image/jpg','image/jpeg'])
-            ->disk('public') // any disk in config('filesystem) except cloud
-            ->category('banner') // optional
+            ])->contentTypes([
+                'image/png',
+                'image/jpg',
+                'image/jpeg',
+            ])->disk('public')// any disk in config('filesystem) except cloud
+            ->category('banner')// optional
             ->save(); // save mutiple 
 ```
 

@@ -2,53 +2,37 @@
 
 namespace Lloricode\LaravelImageable\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
-use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
-use Illuminate\Database\Schema\Blueprint;
 use App\Models\TestModel;
 use App\Models\User;
+use Artisan;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Storage;
 use Lloricode\LaravelImageable\Models\Image;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
     use Functions;
-    
+
     protected $testModel;
+
     protected $user;
 
     public function setUp()
     {
         parent::setUp();
-        
+
         $this->setUpDatabase($this->app);
-        \Artisan::call('storage:link');
+        Artisan::call('storage:link');
     }
 
     public function tearDown()
     {
-        $folder = Image::PATH_FOLDER .'/';
+        $folder = Image::PATH_FOLDER.'/';
         Storage::disk('local')->deleteDirectory($folder);
         Storage::disk('public')->deleteDirectory($folder);
 
         parent::tearDown();
-    }
-
-    /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
     }
 
     /**
@@ -84,10 +68,26 @@ class TestCase extends Orchestra
         ]);
     }
 
+    /**
+     * Define environment setup.
+     *
+     * @param  \Illuminate\Foundation\Application $app
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+    }
+
     protected function getPackageAliases($app)
     {
-        return [
-        ];
+        return [];
     }
 
     protected function getPackageProviders($app)

@@ -1,9 +1,9 @@
 <?php
+
 namespace Lloricode\LaravelImageable\Tests\Units;
 
-use Lloricode\LaravelImageable\Tests\TestCase;
-use Lloricode\LaravelImageable\Models\HelperClass\Uploader;
 use Lloricode\LaravelImageable\Models\Image;
+use Lloricode\LaravelImageable\Tests\TestCase;
 use Spatie\Image\Manipulations;
 
 class TestUploaderPublic extends TestCase
@@ -18,27 +18,18 @@ class TestUploaderPublic extends TestCase
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
-        $this->testModel
-            ->uploads([
+        $this->testModel->uploads([
                 'default_group' => $fakeImage,
-            ])
-            ->each([
+        ])->each([
                 [
                     'size_name' => 'public_test',
                     'spatie' => function ($image) {
-                        $image
-                        ->optimize()
-                        ->fit(Manipulations::FIT_CONTAIN, 120, 300)
-                        ->quality(90);
+                        $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
+
                         return $image;
                     },
-                ]
-            ])
-            ->disk('public')
-            ->save();
-
-
-
+                ],
+        ])->disk('public')->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,
@@ -53,8 +44,6 @@ class TestUploaderPublic extends TestCase
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
-
-
 
         $images = $this->testModel->getImages('public_test');
 

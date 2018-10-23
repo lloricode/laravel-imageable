@@ -1,4 +1,5 @@
 <?php
+
 namespace Lloricode\LaravelImageable\Exceptions;
 
 use Exception;

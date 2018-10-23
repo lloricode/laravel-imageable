@@ -35,14 +35,13 @@ class CreateImageablesTable extends Migration
 
             $table->string('content_type');
             $table->string('extension');
-            $table->unsignedInteger('bytes')->comment = 'Size in bytes.';  
-            $table->string('path')->collation = 'utf8_unicode_ci';      
+            $table->unsignedInteger('bytes')->comment = 'Size in bytes.';
+            $table->string('path')->collation = 'utf8_unicode_ci';
 
             $table->timestamp('created_at');
 
             $table->unique(['size_name', 'group', 'category', 'imageable_id', 'imageable_type'], 'unique_imageable');
         });
-
     }
 
     /**
@@ -55,5 +54,4 @@ class CreateImageablesTable extends Migration
         Schema::dropIfExists('images');
         Schema::dropIfExists('image_files');
     }
-
 }

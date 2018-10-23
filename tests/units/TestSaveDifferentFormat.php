@@ -1,8 +1,9 @@
 <?php
+
 namespace Lloricode\LaravelImageable\Tests\Units;
 
-use Lloricode\LaravelImageable\Tests\TestCase;
 use Lloricode\LaravelImageable\Models\Image;
+use Lloricode\LaravelImageable\Tests\TestCase;
 use Spatie\Image\Manipulations;
 
 class TestSaveDifferentFormat extends TestCase
@@ -17,26 +18,18 @@ class TestSaveDifferentFormat extends TestCase
     {
         $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
-        $this->testModel
-            ->uploads([
+        $this->testModel->uploads([
                 'default_group' => $fakeImage,
-            ])
-            ->each([
+        ])->each([
                 [
                     'size_name' => 'public_test',
                     'spatie' => function ($image) {
-                        $image
-                        ->optimize()
-                        ->format(Manipulations::FORMAT_JPG)
-                        ->fit(Manipulations::FIT_CONTAIN, 120, 300)
-                        ->quality(90);
+                        $image->optimize()->format(Manipulations::FORMAT_JPG)->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
+
                         return $image;
                     },
-                ]
-            ])
-            ->disk('public')
-            ->save();
-
+                ],
+        ])->disk('public')->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [
             'imageable_id' => $this->testModel->id,

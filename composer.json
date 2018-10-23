@@ -16,8 +16,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "~3.3.0|~3.4.2|^3.5.0",
-        "phpunit/phpunit" : "^5.7|6.2|^7.0",
-        "friendsofphp/php-cs-fixer": "^2.12"
+        "phpunit/phpunit": "^5.7|6.2|^7.0"
     },
     "autoload": {
         "files": [
@@ -43,10 +42,6 @@
     },
     "scripts": {
         "test": "./vendor/bin/phpunit",
-        "format": [
-            "./vendor/bin/php-cs-fixer fix src/  --show-progress=estimating",
-            "./vendor/bin/php-cs-fixer fix tests/  --show-progress=estimating"
-        ],
         "phpunit": [
             "./vendor/bin/phpunit --verbose > output.txt -d memory_limit=2048M"
         ]

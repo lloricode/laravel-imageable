@@ -2,12 +2,11 @@
 
 namespace Lloricode\LaravelImageable\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
-use Lloricode\LaravelImageable\Models\Image;
-use Illuminate\Support\Facades\Config;
-use Symfony\Component\HttpFoundation\Response;
 use DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Lloricode\LaravelImageable\Models\Image;
+use Symfony\Component\HttpFoundation\Response;
 
 class ImageableController extends Controller
 {
@@ -15,7 +14,7 @@ class ImageableController extends Controller
     {
         $storage = Config::get("filesystems.disks.{$image->disk}.root");
 
-        return response()->file($storage . '/' . $image->path, [
+        return response()->file($storage.'/'.$image->path, [
             'Content-Type' => $image->content_type,
         ]);
     }
@@ -29,7 +28,7 @@ class ImageableController extends Controller
         if (Config::get('imageable.cache.enable') === true) {
             Cache::tags($imageable->getCachePrefix())->flush();
         }
-        
+
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

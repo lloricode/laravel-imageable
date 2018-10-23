@@ -2,7 +2,6 @@
 
 return [
 
-
     'migration' => [
         'table_name' => 'images',
     ],

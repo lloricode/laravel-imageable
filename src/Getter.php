@@ -7,36 +7,75 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * Class Getter
+ *
+ * @package Lloricode\LaravelImageable
+ * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+ */
 class Getter
 {
+    /**
+     * @var \Illuminate\Database\Eloquent\Model
+     */
     private $_model;
 
+    /**
+     * @var
+     */
     private $_sizeName;
 
+    /**
+     * @var
+     */
     private $_group;
 
+    /**
+     * @var
+     */
     private $_category;
 
+    /**
+     * Getter constructor.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     */
     public function __construct(Model $model)
     {
         $this->_model = $model;
     }
 
+    /**
+     * @param string|null $sizeName
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function setName(string $sizeName = null)
     {
         $this->_sizeName = $sizeName;
     }
 
+    /**
+     * @param string|null $group
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function setGroup(string $group = null)
     {
         $this->_group = $group;
     }
 
+    /**
+     * @param string|null $category
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function setCategory(string $category = null)
     {
         $this->_category = $category;
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function result(): Collection
     {
         $return = collect([]);
@@ -77,6 +116,10 @@ class Getter
         return $return;
     }
 
+    /**
+     * @return mixed
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     private function _getImage()
     {
         $images = $this->_model->images()->select('slug', 'disk', 'path', 'category', 'group', 'size_name', 'client_original_name');

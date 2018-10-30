@@ -4,6 +4,12 @@ namespace Lloricode\LaravelImageable\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class LaravelImageableProvider
+ *
+ * @package Lloricode\LaravelImageable\Providers
+ * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+ */
 class LaravelImageableProvider extends ServiceProvider
 {
     /**

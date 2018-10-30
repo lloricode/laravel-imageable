@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class Image
+ *
+ * @package Lloricode\LaravelImageable\Models
+ * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+ */
 class Image extends Model
 {
     const UPDATED_AT = null;
@@ -39,6 +45,11 @@ class Image extends Model
         'user_id',
     ];
 
+    /**
+     * Image constructor.
+     *
+     * @param array $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -70,6 +81,10 @@ class Image extends Model
         return 'slug';
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function imageable()
     {
         return $this->morphTo();

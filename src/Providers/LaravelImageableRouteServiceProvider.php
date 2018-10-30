@@ -5,8 +5,17 @@ namespace Lloricode\LaravelImageable\Providers;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Class LaravelImageableRouteServiceProvider
+ *
+ * @package Lloricode\LaravelImageable\Providers
+ * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+ */
 class LaravelImageableRouteServiceProvider extends RouteServiceProvider
 {
+    /**
+     * @var string
+     */
     protected $namespace = 'Lloricode\LaravelImageable\Http\Controllers';
 
     public function boot()

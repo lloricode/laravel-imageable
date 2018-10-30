@@ -8,8 +8,19 @@ use Illuminate\Support\Facades\Config;
 use Lloricode\LaravelImageable\Models\Image;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ImageableController
+ *
+ * @package Lloricode\LaravelImageable\Http\Controllers
+ * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+ */
 class ImageableController extends Controller
 {
+    /**
+     * @param \Lloricode\LaravelImageable\Models\Image $image
+     * @return mixed
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function show(Image $image)
     {
         $storage = Config::get("filesystems.disks.{$image->disk}.root");
@@ -19,6 +30,11 @@ class ImageableController extends Controller
         ]);
     }
 
+    /**
+     * @param \Lloricode\LaravelImageable\Models\Image $image
+     * @return \Illuminate\Http\JsonResponse
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function delete(Image $image)
     {
         $imageable = $image->imageable;

@@ -13,24 +13,56 @@ use Lloricode\LaravelImageable\Exceptions\InvalidMimeTypeException;
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
 use Spatie\Image\Image as SpatieImage;
 
+/**
+ * Class Uploader
+ *
+ * @package Lloricode\LaravelImageable
+ * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+ */
 class Uploader
 {
+    /**
+     * @var
+     */
     private $_contentTypes;
 
+    /**
+     * @var \Illuminate\Support\Collection
+     */
     private $_uploadedFiles;
 
+    /**
+     * @var
+     */
     private $_each;
 
+    /**
+     * @var
+     */
     private $_category;
 
+    /**
+     * @var
+     */
     private $_disk;
 
+    /**
+     * @var \Illuminate\Database\Eloquent\Model
+     */
     private $_model;
 
+    /**
+     * @var
+     */
     private $_now;
 
-    private $_configFilesystem;
-
+    /**
+     * Uploader constructor.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param array $uploadedFiles
+     * @throws \Throwable
+     */
     public function __construct(Model $model, array $uploadedFiles)
     {
         foreach ($uploadedFiles as $group => $uploadedFile) {
@@ -47,6 +79,9 @@ class Uploader
         $this->_uploadedFiles = collect($uploadedFiles);
     }
 
+    /**
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     private function _resetAttributes()
     {
         $this->_model = null;
@@ -60,6 +95,10 @@ class Uploader
         $this->_disk = $this->_configFileSystem['default'] == $this->_configFileSystem['cloud'] ? $this->_availableDisks()[0] : $this->_configFileSystem['default'];
     }
 
+    /**
+     * @return array
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     private function _availableDisks(): array
     {
         $configFileSystem = $this->_configFileSystem;
@@ -68,6 +107,9 @@ class Uploader
         return array_keys($configFileSystem['disks']);
     }
 
+    /**
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function save()
     {
         $uploadedFiles = $this->_uploadedFiles;
@@ -132,6 +174,10 @@ class Uploader
         });
     }
 
+    /**
+     * @return string
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     private function _storagePath()
     {
         $path = ImageModel::PATH_FOLDER.'/'.kebab_case(class_basename($this->_model)).'/'.md5($this->_model->id);
@@ -145,16 +191,30 @@ class Uploader
         return $path;
     }
 
+    /**
+     * @return string
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     private function _storageDiskPath()
     {
         return $this->_configFileSystem['disks'][$this->_disk]['root'].'/';
     }
 
+    /**
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     private function _getAuthUser()
     {
         return auth()->check() ? auth()->user() : null; // TODO: config
     }
 
+    /**
+     * @param string $disk
+     * @return \Lloricode\LaravelImageable\Uploader
+     * @throws \Throwable
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function disk(string $disk): self
     {
         $disks = $this->_availableDisks();
@@ -166,6 +226,11 @@ class Uploader
         return $this;
     }
 
+    /**
+     * @param array $contentTypes
+     * @return \Lloricode\LaravelImageable\Uploader
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function contentTypes(array $contentTypes): self
     {
         $this->_contentTypes = $contentTypes;
@@ -173,6 +238,12 @@ class Uploader
         return $this;
     }
 
+    /**
+     * @param array $each
+     * @return \Lloricode\LaravelImageable\Uploader
+     * @throws \Throwable
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function each(array $each): self
     {
         foreach ($each as $each_) {
@@ -186,6 +257,11 @@ class Uploader
         return $this;
     }
 
+    /**
+     * @param string $category
+     * @return \Lloricode\LaravelImageable\Uploader
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function category(string $category): self
     {
         $this->_category = $category;

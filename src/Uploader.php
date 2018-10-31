@@ -2,12 +2,12 @@
 
 namespace Lloricode\LaravelImageable;
 
-use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Lloricode\LaravelImageable\Exceptions\InvalidMimeTypeException;
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
@@ -126,6 +126,15 @@ class Uploader
         DB::transaction(function () use ($uploadedFiles, $storagePath) {
             $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
                 foreach ($this->_each as $each) {
+
+                    throw_if(ImageModel::where([
+                            'size_name' => $each['size_name'],
+                            'group' => $group,
+                            'category' => $this->_category,
+                            'imageable_id' => $this->_model->id,
+                            'imageable_type' => get_class($this->_model),
+                        ])->count() > 0, Exception::class);
+
                     $filePath = $storagePath.'/'.$each['size_name'].'-'.md5(get_class($this->_model).$this->_model->id.$this->_now->format('Ymdhis').$this->_category.$group).'.';
 
                     $toBeUpload = $each['spatie'](SpatieImage::load($uploadedFile));

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Lloricode\LaravelImageable\Exceptions\FileNotUniqueException;
 use Lloricode\LaravelImageable\Exceptions\InvalidMimeTypeException;
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
 use Spatie\Image\Image as SpatieImage;
@@ -133,7 +134,7 @@ class Uploader
                             'category' => $this->_category,
                             'imageable_id' => $this->_model->id,
                             'imageable_type' => get_class($this->_model),
-                        ])->count() > 0, Exception::class);
+                        ])->count() > 0, FileNotUniqueException::class, 'File upload needs to be unique.');
 
                     $filePath = $storagePath.'/'.$each['size_name'].'-'.md5(get_class($this->_model).$this->_model->id.$this->_now->format('Ymdhis').$this->_category.$group).'.';
 

@@ -63,9 +63,9 @@ return [
 
         // files to be upload 
         $imageFiles = [
-            // group => instance of \Illuminate\Http\UploadedFile
-            'first_image' => $imageFile1,
-            'second_image' => $imageFile2,
+            //  instance of \Illuminate\Http\UploadedFile
+            $imageFile1,
+            $imageFile2,
         ];
 
         $myModel->uploads($imageFiles)// must array, 
@@ -111,7 +111,7 @@ Illuminate\Support\Collection {#2947
     0 => {#2948
       +"size_name": "banner"
       +"category": "banner"
-      +"group": "first_image"
+      +"group": "b2cec498052fe0c511af6fe24c06b7e2"
       +"client_original_name": "avatar.jpg"
       +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/banner-43faf04b2c2b6cbf05c49b76cd6b7290.jpg"
@@ -119,7 +119,7 @@ Illuminate\Support\Collection {#2947
     1 => {#2946
       +"size_name": "thumbnail"
       +"category": "banner"
-      +"group": "first_image"
+      +"group": "b2cec498052fe0c511af6fe24c06b7e2"
       +"client_original_name": "avatar.jpg"
       +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/thumbnail-43faf04b2c2b6cbf05c49b76cd6b7290.jpg"
@@ -127,7 +127,7 @@ Illuminate\Support\Collection {#2947
     2 => {#2963
       +"size_name": "banner"
       +"category": "banner"
-      +"group": "second_image"
+      +"group": "b2cec498052fe0c511af6fe24c06b7e2"
       +"client_original_name": "avatar.jpg"
       +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/banner-778f3ef046040aafa2c71d803a5e41ba.jpg"
@@ -135,7 +135,7 @@ Illuminate\Support\Collection {#2947
     3 => {#2994
       +"size_name": "thumbnail"
       +"category": "banner"
-      +"group": "second_image"
+      +"group": "b2cec498052fe0c511af6fe24c06b7e2"
       +"client_original_name": "avatar.jpg"
       +"source_delete": "http://localhost/imageable/public-test-120-300"
       +"source": "http://localhost/storage/imageable/test-model/c4ca4238a0b923820dcc509a6f75849b/thumbnail-778f3ef046040aafa2c71d803a5e41ba.jpg"

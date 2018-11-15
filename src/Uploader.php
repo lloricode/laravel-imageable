@@ -96,8 +96,8 @@ class Uploader
 
         DB::transaction(function () use ($uploadedFiles, $storagePath) {
             $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
+                $group = md5(now()->addSeconds($group)->timestamp.get_class($this->_model).$this->_model->id.$this->_category);
                 foreach ($this->_each as $each) {
-                    $group = md5(now()->addSeconds($group)->timestamp.$each['size_name'].get_class($this->_model).$this->_model->id.$this->_category);
                     throw_if(ImageModel::where([
                             'size_name' => $each['size_name'],
                             'group' => $group,

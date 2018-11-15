@@ -19,7 +19,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile();
 
         $this->testModel->uploads([
-                'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
                 [
                     'size_name' => 'test_default',
@@ -36,7 +36,6 @@ class TestUploader extends TestCase
             'size_name' => 'test_default',
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -50,7 +49,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $this->testModel->uploads([
-                'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
                 [
                     'size_name' => 'test',
@@ -71,7 +70,6 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -85,7 +83,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
         $this->testModel->uploads([
-                'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
                 [
                     'size_name' => 'test',
@@ -106,7 +104,6 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'png',
             'disk' => 'local',
-            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/png',
         ]);
@@ -120,7 +117,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $this->testModel->uploads([
-                'banner-primary' => $fakeImage,
+            $fakeImage,
         ])->each([
                 [
                     'size_name' => 'test',
@@ -141,7 +138,6 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'banner-primary',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -155,7 +151,7 @@ class TestUploader extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $this->testModel->uploads([
-                'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
                 [
                     'size_name' => 'test',
@@ -176,7 +172,6 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'default_group',
             'category' => 'banner',
             'content_type' => 'image/jpeg',
         ]);
@@ -198,13 +193,7 @@ class TestUploader extends TestCase
             ],
         ]);
 
-        $_fakeImages = [];
-
-        foreach ($fakeImages as $key => $fakeImage) {
-            $_fakeImages["fake_image_$key"] = $fakeImage;
-        }
-
-        $this->testModel->uploads($_fakeImages)->each([
+        $this->testModel->uploads($fakeImages)->each([
                 [
                     'size_name' => 'img1',
                     'spatie' => function ($image) {
@@ -232,7 +221,6 @@ class TestUploader extends TestCase
             'height' => 100,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'fake_image_0',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -246,7 +234,6 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'fake_image_0',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -260,7 +247,6 @@ class TestUploader extends TestCase
             'height' => 100,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'fake_image_1',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -274,7 +260,6 @@ class TestUploader extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'local',
-            'group' => 'fake_image_1',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);

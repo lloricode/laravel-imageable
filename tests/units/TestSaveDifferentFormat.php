@@ -19,7 +19,7 @@ class TestSaveDifferentFormat extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
         $this->testModel->uploads([
-                'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
                 [
                     'size_name' => 'public_test',
@@ -38,7 +38,6 @@ class TestSaveDifferentFormat extends TestCase
             'size_name' => 'public_test',
             'extension' => 'jpg', // <---------------
             'disk' => 'public',
-            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);

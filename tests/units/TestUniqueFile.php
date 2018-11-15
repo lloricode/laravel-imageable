@@ -31,7 +31,7 @@ class TestUniqueFile extends TestCase
         $this->expectException(FileNotUniqueException::class);
 
         $testModel->uploads([
-            'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
             [
                 'size_name' => 'test_image',
@@ -42,7 +42,7 @@ class TestUniqueFile extends TestCase
         ])->save();
 
         $testModel->uploads([
-            'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
             [
                 'size_name' => 'test_image',

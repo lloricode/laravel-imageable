@@ -18,7 +18,7 @@ class TestUploaderPublicDelete extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $this->testModel->uploads([
-            'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
             [
                 'size_name' => 'public_test',

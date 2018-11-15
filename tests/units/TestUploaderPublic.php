@@ -19,7 +19,7 @@ class TestUploaderPublic extends TestCase
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
         $this->testModel->uploads([
-                'default_group' => $fakeImage,
+            $fakeImage,
         ])->each([
                 [
                     'size_name' => 'public_test',
@@ -40,7 +40,6 @@ class TestUploaderPublic extends TestCase
             'height' => 300,
             'extension' => 'jpg',
             'disk' => 'public',
-            'group' => 'default_group',
             'category' => null,
             'content_type' => 'image/jpeg',
         ]);
@@ -50,7 +49,6 @@ class TestUploaderPublic extends TestCase
         // check keys
         $this->assertTrue(is_null($images->first()->category));
         $this->assertEquals('public_test', $images->first()->size_name);
-        $this->assertEquals('default_group', $images->first()->group);
         $this->assertEquals('avatar.jpg', $images->first()->client_original_name);
 
         $this->assertFileExists(public_path(str_replace(config('app.url'), '', $images->first()->source)));

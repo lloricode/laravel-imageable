@@ -21,7 +21,7 @@ class TestSlug extends TestCase
             TestModel::create([
                 'name' => 'test',
             ])->uploads([
-                'default_group' => $fakeImage,
+                $fakeImage,
             ])->each([
                     [
                         'size_name' => 'test_image',

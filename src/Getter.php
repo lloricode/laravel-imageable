@@ -36,11 +36,10 @@ class Getter
     private $_category;
 
     /**
-     * Getter constructor.
-     *
      * @param \Illuminate\Database\Eloquent\Model $model
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */
-    public function __construct(Model $model)
+    public function setModel(Model $model)
     {
         $this->_model = $model;
     }

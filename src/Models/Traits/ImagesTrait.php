@@ -26,7 +26,10 @@ trait ImageableTrait
      */
     public function uploads(array $images): Uploader
     {
-        return new Uploader($this, $images);
+        $uploader = resolve(Uploader::class);
+        $uploader->prepare($this, $images);
+
+        return $uploader;
     }
 
     /**
@@ -72,7 +75,8 @@ trait ImageableTrait
      */
     public function getImages(string $name = null, string $category = null, string $group = null): Collection
     {
-        $getter = new Getter($this);
+        $getter = resolve(Getter::class);
+        $getter->setModel($this);
         $getter->setName($name);
         $getter->setGroup($group);
         $getter->setCategory($category);

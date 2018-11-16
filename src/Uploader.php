@@ -58,13 +58,12 @@ class Uploader
     private $_now;
 
     /**
-     * Uploader constructor.
-     *
      * @param \Illuminate\Database\Eloquent\Model $model
      * @param array $uploadedFiles
      * @throws \Throwable
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */
-    public function __construct(Model $model, array $uploadedFiles)
+    public function prepare(Model $model, array $uploadedFiles)
     {
         foreach ($uploadedFiles as $uploadedFile) {
             throw_if(! ($uploadedFile instanceof UploadedFile), Exception::class, 'Must instance of '.UploadedFile::class);
@@ -76,34 +75,6 @@ class Uploader
 
         $this->_model = $model;
         $this->_uploadedFiles = collect(array_values($uploadedFiles));
-    }
-
-    /**
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _resetAttributes()
-    {
-        $this->_model = null;
-        $this->_uploadedFiles = collect([]);
-        $this->_contentTypes = null;
-        $this->_each = null;
-        $this->_category = null;
-        $this->_group = null;
-        $this->_now = now();
-
-        $this->_disk = $this->_configFileSystem['default'] == $this->_configFileSystem['cloud'] ? $this->_availableDisks()[0] : $this->_configFileSystem['default'];
-    }
-
-    /**
-     * @return array
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _availableDisks(): array
-    {
-        $configFileSystem = $this->_configFileSystem;
-        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
-
-        return array_keys($configFileSystem['disks']);
     }
 
     /**
@@ -183,41 +154,6 @@ class Uploader
     }
 
     /**
-     * @return string
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _storagePath()
-    {
-        $path = ImageModel::PATH_FOLDER.'/'.kebab_case(class_basename($this->_model)).'/'.md5($this->_model->id);
-
-        $path = $this->_storageDiskPath().$path;
-
-        if (! file_exists($path)) {
-            File::makeDirectory($path, 0755, true, true);
-        }
-
-        return $path;
-    }
-
-    /**
-     * @return string
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _storageDiskPath()
-    {
-        return $this->_configFileSystem['disks'][$this->_disk]['root'].'/';
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _getAuthUser()
-    {
-        return auth()->check() ? auth()->user() : null; // TODO: config
-    }
-
-    /**
      * @param string $disk
      * @return \Lloricode\LaravelImageable\Uploader
      * @throws \Throwable
@@ -275,5 +211,68 @@ class Uploader
         $this->_category = $category;
 
         return $this;
+    }
+
+    /**
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _resetAttributes()
+    {
+        $this->_model = null;
+        $this->_uploadedFiles = collect([]);
+        $this->_contentTypes = null;
+        $this->_each = null;
+        $this->_category = null;
+        $this->_group = null;
+        $this->_now = now();
+
+        $this->_disk = $this->_configFileSystem['default'] == $this->_configFileSystem['cloud'] ? $this->_availableDisks()[0] : $this->_configFileSystem['default'];
+    }
+
+    /**
+     * @return array
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _availableDisks(): array
+    {
+        $configFileSystem = $this->_configFileSystem;
+        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
+
+        return array_keys($configFileSystem['disks']);
+    }
+
+    /**
+     * @return string
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _storagePath()
+    {
+        $path = ImageModel::PATH_FOLDER.'/'.kebab_case(class_basename($this->_model)).'/'.md5($this->_model->id);
+
+        $path = $this->_storageDiskPath().$path;
+
+        if (! file_exists($path)) {
+            File::makeDirectory($path, 0755, true, true);
+        }
+
+        return $path;
+    }
+
+    /**
+     * @return string
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _storageDiskPath()
+    {
+        return $this->_configFileSystem['disks'][$this->_disk]['root'].'/';
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _getAuthUser()
+    {
+        return auth()->check() ? auth()->user() : null; // TODO: config
     }
 }

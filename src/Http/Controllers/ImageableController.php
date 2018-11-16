@@ -2,9 +2,9 @@
 
 namespace Lloricode\LaravelImageable\Http\Controllers;
 
+use Cache;
+use Config;
 use DB;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Lloricode\LaravelImageable\Models\Image;
 use Symfony\Component\HttpFoundation\Response;
 

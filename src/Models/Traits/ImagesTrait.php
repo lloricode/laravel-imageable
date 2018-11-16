@@ -2,10 +2,10 @@
 
 namespace Lloricode\LaravelImageable\Models\Traits;
 
+use Cache;
+use Config;
 use DB;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Lloricode\LaravelImageable\Getter;
 use Lloricode\LaravelImageable\Models\Image;
 use Lloricode\LaravelImageable\Uploader;

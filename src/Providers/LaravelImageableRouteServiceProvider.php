@@ -3,7 +3,7 @@
 namespace Lloricode\LaravelImageable\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Route;
+use Route;
 
 /**
  * Class LaravelImageableRouteServiceProvider
@@ -16,7 +16,7 @@ class LaravelImageableRouteServiceProvider extends RouteServiceProvider
     /**
      * @var string
      */
-    protected $namespace = 'Lloricode\LaravelImageable\Http\Controllers';
+    const NAMESPAME = 'Lloricode\LaravelImageable\Http\Controllers';
 
     public function boot()
     {
@@ -32,11 +32,11 @@ class LaravelImageableRouteServiceProvider extends RouteServiceProvider
 
     protected function mapApiRoutes()
     {
-        Route::prefix('api/imageable')->middleware('api')->as('imageable.api.')->namespace($this->namespace)->group(__DIR__.'/../resources/routes/api-route.php');
+        Route::prefix('api/imageable')->middleware('api')->as('imageable.api.')->namespace(self::NAMESPAME)->group(__DIR__.'/../resources/routes/api-route.php');
     }
 
     protected function mapWebRoutes()
     {
-        Route::prefix('imageable')->middleware('web')->as('imageable.web.')->namespace($this->namespace)->group(__DIR__.'/../resources/routes/web-route.php');
+        Route::prefix('imageable')->middleware('web')->as('imageable.web.')->namespace(self::NAMESPAME)->group(__DIR__.'/../resources/routes/web-route.php');
     }
 }

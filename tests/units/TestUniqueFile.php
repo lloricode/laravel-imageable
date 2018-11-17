@@ -23,13 +23,13 @@ class TestUniqueFile extends TestCase
 {
     public function testUniqueUpload()
     {
+        $this->expectException(FileNotUniqueException::class);
+
         $fakeImage = $this->generateFakeFile();
         $testModel = TestModel::create([
             'name' => 'test',
         ]);
 
-        $this->expectException(FileNotUniqueException::class);
-
         $testModel->uploads([
             $fakeImage,
         ])->each([
@@ -51,6 +51,38 @@ class TestUniqueFile extends TestCase
                 },
             ],
         ])->save();
-        //$this->assertTrue(true);
+    }
+
+    public function testUniqueUploadNotThrow()
+    {
+
+        $fakeImage = $this->generateFakeFile();
+        $testModel = TestModel::create([
+            'name' => 'test',
+        ]);
+
+        $testModel->uploads([
+            $fakeImage,
+        ])->each([
+            [
+                'size_name' => 'test_image',
+                'spatie' => function ($image) {
+                    return $image;
+                },
+            ],
+        ])->save();
+
+        $testModel->uploads([
+            $fakeImage,
+        ])->each([
+            [
+                'size_name' => 'test_image',
+                'spatie' => function ($image) {
+                    return $image;
+                },
+            ],
+        ])->category('test')->save();
+
+        $this->assertTrue(true);
     }
 }

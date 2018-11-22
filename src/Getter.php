@@ -95,6 +95,7 @@ class Getter
             $data->group = $imageFile->group;
             $data->client_original_name = $imageFile->client_original_name;
             $data->slug = $imageFile->slug;
+            $data->order = $imageFile->order;
             $data->source_delete = route('imageable.web.delete', $imageFile);
             $data->source = null;
 
@@ -121,7 +122,7 @@ class Getter
      */
     private function _getImage()
     {
-        $images = $this->_model->images()->select('slug', 'disk', 'path', 'category', 'group', 'size_name', 'client_original_name');
+        $images = $this->_model->images()->select('slug', 'disk', 'path', 'category', 'group', 'size_name', 'order', 'client_original_name');
 
         $cacheName = '';
         foreach (explode('\\', get_class($this->_model)) as $exploded) {

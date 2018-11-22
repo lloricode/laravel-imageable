@@ -36,6 +36,7 @@ class CreateImageablesTable extends Migration
             $table->unsignedInteger('height');
             $table->string('group');
             $table->string('category')->nullable();
+            $table->unsignedInteger('order');
 
             $table->string('content_type');
             $table->string('extension');

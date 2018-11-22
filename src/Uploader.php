@@ -96,6 +96,8 @@ class Uploader
         DB::transaction(function () use ($uploadedFiles, $storagePath) {
             $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
                 $group = md5($this->_now->addSeconds($group + 1)->format('Ymdhis').get_class($this->_model).$this->_model->id.$this->_category);
+                $this->_model->getImages();
+                $order = 1;
                 foreach ($this->_each as $each) {
                     throw_if(ImageModel::where([
                             'size_name' => $each['size_name'],
@@ -143,6 +145,7 @@ class Uploader
                         'disk' => $this->_disk,
                         'category' => $this->_category,
                         'group' => $group,
+                        'order' => $order,
                     ]);
                 }
             });

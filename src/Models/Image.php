@@ -34,6 +34,7 @@ class Image extends Model
         'bytes',
         'disk',
         'client_original_name',
+        'order',
     ];
 
     /**

@@ -21,14 +21,14 @@ class TestUploaderPublic extends TestCase
         $this->testModel->uploads([
             $fakeImage,
         ])->each([
-                [
-                    'size_name' => 'public_test',
-                    'spatie' => function ($image) {
-                        $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
+            [
+                'size_name' => 'public_test',
+                'spatie' => function ($image) {
+                    $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
 
-                        return $image;
-                    },
-                ],
+                    return $image;
+                },
+            ],
         ])->disk('public')->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [

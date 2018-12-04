@@ -102,7 +102,7 @@ class Getter
             // check disk if visibility is public
             if (isset($disk['visibility'])) {
                 if ($disk['visibility'] == 'public') {
-                    $data->source = $disk['url'].'/'.$imageFile->path;
+                    $data->source = $disk['url'] . '/' . $imageFile->path;
                 }
             }
 
@@ -122,26 +122,27 @@ class Getter
      */
     private function _getImage()
     {
-        $images = $this->_model->images()->select('slug', 'disk', 'path', 'category', 'group', 'size_name', 'order', 'client_original_name');
+        $images = $this->_model->images()->select('slug', 'disk', 'path', 'category', 'group', 'size_name', 'order',
+            'client_original_name');
 
         $cacheName = '';
         foreach (explode('\\', get_class($this->_model)) as $exploded) {
-            $cacheName .= '-'.str_replace('-', '_', kebab_case($exploded));
+            $cacheName .= '-' . str_replace('-', '_', kebab_case($exploded));
         }
 
-        $cacheName .= '-'.$this->_model->id;
+        $cacheName .= '-' . $this->_model->id;
 
-        if (! is_null($this->_sizeName)) {
+        if (!is_null($this->_sizeName)) {
             $images = $images->where('size_name', $this->_sizeName);
-            $cacheName .= '-'.$this->_sizeName;
+            $cacheName .= '-' . $this->_sizeName;
         }
-        if (! is_null($this->_category)) {
+        if (!is_null($this->_category)) {
             $images = $images->where('category', $this->_category);
-            $cacheName .= '-'.$this->_category;
+            $cacheName .= '-' . $this->_category;
         }
-        if (! is_null($this->_group)) {
+        if (!is_null($this->_group)) {
             $images = $images->where('group', $this->_group);
-            $cacheName .= '-'.$this->_group;
+            $cacheName .= '-' . $this->_group;
         }
 
         $cacheName = str_replace('_', '-', $cacheName);

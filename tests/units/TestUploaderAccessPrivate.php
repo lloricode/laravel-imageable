@@ -18,12 +18,12 @@ class TestUploaderAccessPrivate extends TestCase
         $this->testModel->uploads([
             $fakeImage,
         ])->each([
-                [
-                    'size_name' => 'private_test',
-                    'spatie' => function ($image) {
-                        return $image;
-                    },
-                ],
+            [
+                'size_name' => 'private_test',
+                'spatie' => function ($image) {
+                    return $image;
+                },
+            ],
         ])->disk('local')->save();
 
         $images = $this->testModel->getImages('private_test');

@@ -41,7 +41,7 @@ class TestGrouping extends TestCase
                         return $image;
                     },
                 ],
-            ])->category('category_'.($i + 1))->save();
+            ])->category('category_' . ($i + 1))->save();
         }
 
         $this->assertCount($count, $testModel->getImages()->unique('group'));

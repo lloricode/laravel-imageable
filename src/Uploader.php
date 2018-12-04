@@ -57,6 +57,11 @@ class Uploader
      */
     private $_now;
 
+    /*
+     *
+     */
+    private $_configFileSystem;
+
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
      * @param array $uploadedFiles
@@ -66,7 +71,8 @@ class Uploader
     public function prepare(Model $model, array $uploadedFiles)
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            throw_if(! ($uploadedFile instanceof UploadedFile), Exception::class, 'Must instance of '.UploadedFile::class);
+            throw_if(!($uploadedFile instanceof UploadedFile), Exception::class,
+                'Must instance of ' . UploadedFile::class);
         }
 
         $this->_configFileSystem = Config::get('filesystems');
@@ -80,6 +86,34 @@ class Uploader
     /**
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */
+    private function _resetAttributes()
+    {
+        $this->_model = null;
+        $this->_uploadedFiles = collect([]);
+        $this->_contentTypes = null;
+        $this->_each = null;
+        $this->_category = null;
+        $this->_group = null;
+        $this->_now = now();
+
+        $this->_disk = $this->_configFileSystem['default'] == $this->_configFileSystem['cloud'] ? $this->_availableDisks()[0] : $this->_configFileSystem['default'];
+    }
+
+    /**
+     * @return array
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _availableDisks(): array
+    {
+        $configFileSystem = $this->_configFileSystem;
+        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
+
+        return array_keys($configFileSystem['disks']);
+    }
+
+    /**
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
     public function save()
     {
         $uploadedFiles = $this->_uploadedFiles;
@@ -87,15 +121,17 @@ class Uploader
         $storagePath = $this->_storagePath();
 
         // check content types
-        if (! empty($this->_contentTypes)) {
+        if (!empty($this->_contentTypes)) {
             $uploadedFiles->map(function ($uploadedFile, $key) {
-                throw_if(! in_array($uploadedFile->getMimeType(), $this->_contentTypes), InvalidMimeTypeException::class, 'Invalid content type it must ['.implode(', ', $this->_contentTypes).'], '.$uploadedFile->getMimeType().' given.');
+                throw_if(!in_array($uploadedFile->getMimeType(), $this->_contentTypes), InvalidMimeTypeException::class,
+                    'Invalid content type it must [' . implode(', ',
+                        $this->_contentTypes) . '], ' . $uploadedFile->getMimeType() . ' given.');
             });
         }
 
         DB::transaction(function () use ($uploadedFiles, $storagePath) {
             $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
-                $group = md5($this->_now->addSeconds($group + 1)->format('Ymdhis').get_class($this->_model).$this->_model->id.$this->_category);
+                $group = md5($this->_now->addSeconds($group + 1)->format('Ymdhis') . get_class($this->_model) . $this->_model->id . $this->_category);
                 $this->_model->getImages();
                 $order = 1;
                 foreach ($this->_each as $each) {
@@ -107,7 +143,7 @@ class Uploader
                             'imageable_type' => get_class($this->_model),
                         ])->count() > 0, FileNotUniqueException::class, 'File upload needs to be unique.');
 
-                    $filePath = $storagePath.'/'.$each['size_name'].'-'.md5(get_class($this->_model).$this->_model->id.$this->_now->format('Ymdhis').$this->_category.$group).'.';
+                    $filePath = $storagePath . '/' . $each['size_name'] . '-' . md5(get_class($this->_model) . $this->_model->id . $this->_now->format('Ymdhis') . $this->_category . $group) . '.';
 
                     $toBeUpload = $each['spatie'](SpatieImage::load($uploadedFile));
 
@@ -117,12 +153,12 @@ class Uploader
                     $fileExtension = $uploadedFile->getClientOriginalExtension();
 
                     $isCustomFormat = false;
-                    if (! empty($manipulations->toArray()[0]['format'])) {
+                    if (!empty($manipulations->toArray()[0]['format'])) {
                         $fileExtension = $manipulations->toArray()[0]['format'];
                         $isCustomFormat = true;
                     }
 
-                    $fullFilePath = $filePath.$fileExtension;
+                    $fullFilePath = $filePath . $fileExtension;
 
                     $toBeUpload->save($fullFilePath);
 
@@ -157,6 +193,41 @@ class Uploader
     }
 
     /**
+     * @return string
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _storagePath()
+    {
+        $path = ImageModel::PATH_FOLDER . '/' . kebab_case(class_basename($this->_model)) . '/' . md5($this->_model->id);
+
+        $path = $this->_storageDiskPath() . $path;
+
+        if (!file_exists($path)) {
+            File::makeDirectory($path, 0755, true, true);
+        }
+
+        return $path;
+    }
+
+    /**
+     * @return string
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _storageDiskPath()
+    {
+        return $this->_configFileSystem['disks'][$this->_disk]['root'] . '/';
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
+     */
+    private function _getAuthUser()
+    {
+        return auth()->check() ? auth()->user() : null; // TODO: config
+    }
+
+    /**
      * @param string $disk
      * @return \Lloricode\LaravelImageable\Uploader
      * @throws \Throwable
@@ -166,7 +237,8 @@ class Uploader
     {
         $disks = $this->_availableDisks();
 
-        throw_if(! in_array($disk, $disks), Exception::class, 'Invalid disk parameter in '.get_class($this).'->disk($disk)');
+        throw_if(!in_array($disk, $disks), Exception::class,
+            'Invalid disk parameter in ' . get_class($this) . '->disk($disk)');
 
         $this->_disk = $disk;
 
@@ -195,7 +267,8 @@ class Uploader
     {
         foreach ($each as $each_) {
             foreach (['size_name', 'spatie'] as $key) {
-                throw_if(! array_key_exists($key, $each_), Exception::class, 'Invalid each parameter in '.get_class($this).'->each($each)');
+                throw_if(!array_key_exists($key, $each_), Exception::class,
+                    'Invalid each parameter in ' . get_class($this) . '->each($each)');
             }
         }
 
@@ -214,68 +287,5 @@ class Uploader
         $this->_category = $category;
 
         return $this;
-    }
-
-    /**
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _resetAttributes()
-    {
-        $this->_model = null;
-        $this->_uploadedFiles = collect([]);
-        $this->_contentTypes = null;
-        $this->_each = null;
-        $this->_category = null;
-        $this->_group = null;
-        $this->_now = now();
-
-        $this->_disk = $this->_configFileSystem['default'] == $this->_configFileSystem['cloud'] ? $this->_availableDisks()[0] : $this->_configFileSystem['default'];
-    }
-
-    /**
-     * @return array
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _availableDisks(): array
-    {
-        $configFileSystem = $this->_configFileSystem;
-        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
-
-        return array_keys($configFileSystem['disks']);
-    }
-
-    /**
-     * @return string
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _storagePath()
-    {
-        $path = ImageModel::PATH_FOLDER.'/'.kebab_case(class_basename($this->_model)).'/'.md5($this->_model->id);
-
-        $path = $this->_storageDiskPath().$path;
-
-        if (! file_exists($path)) {
-            File::makeDirectory($path, 0755, true, true);
-        }
-
-        return $path;
-    }
-
-    /**
-     * @return string
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _storageDiskPath()
-    {
-        return $this->_configFileSystem['disks'][$this->_disk]['root'].'/';
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
-     * @author Lloric Mayuga Garcia <lloricode@gmail.com>
-     */
-    private function _getAuthUser()
-    {
-        return auth()->check() ? auth()->user() : null; // TODO: config
     }
 }

@@ -21,12 +21,12 @@ class TestUploader extends TestCase
         $this->testModel->uploads([
             $fakeImage,
         ])->each([
-                [
-                    'size_name' => 'test_default',
-                    'spatie' => function ($image) {
-                        return $image;
-                    },
-                ],
+            [
+                'size_name' => 'test_default',
+                'spatie' => function ($image) {
+                    return $image;
+                },
+            ],
         ])->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [
@@ -51,14 +51,14 @@ class TestUploader extends TestCase
         $this->testModel->uploads([
             $fakeImage,
         ])->each([
-                [
-                    'size_name' => 'test',
-                    'spatie' => function ($image) {
-                        $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300);
+            [
+                'size_name' => 'test',
+                'spatie' => function ($image) {
+                    $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300);
 
-                        return $image;
-                    },
-                ],
+                    return $image;
+                },
+            ],
         ])->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [
@@ -85,14 +85,14 @@ class TestUploader extends TestCase
         $this->testModel->uploads([
             $fakeImage,
         ])->each([
-                [
-                    'size_name' => 'test',
-                    'spatie' => function ($image) {
-                        $image->optimize()->width(120)->height(300);
+            [
+                'size_name' => 'test',
+                'spatie' => function ($image) {
+                    $image->optimize()->width(120)->height(300);
 
-                        return $image;
-                    },
-                ],
+                    return $image;
+                },
+            ],
         ])->contentTypes(['image/png', 'image/jpg'])->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [
@@ -119,14 +119,14 @@ class TestUploader extends TestCase
         $this->testModel->uploads([
             $fakeImage,
         ])->each([
-                [
-                    'size_name' => 'test',
-                    'spatie' => function ($image) {
-                        $image->optimize()->width(120)->height(300);
+            [
+                'size_name' => 'test',
+                'spatie' => function ($image) {
+                    $image->optimize()->width(120)->height(300);
 
-                        return $image;
-                    },
-                ],
+                    return $image;
+                },
+            ],
         ])->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [
@@ -153,14 +153,14 @@ class TestUploader extends TestCase
         $this->testModel->uploads([
             $fakeImage,
         ])->each([
-                [
-                    'size_name' => 'test',
-                    'spatie' => function ($image) {
-                        $image->optimize()->width(120)->height(300);
+            [
+                'size_name' => 'test',
+                'spatie' => function ($image) {
+                    $image->optimize()->width(120)->height(300);
 
-                        return $image;
-                    },
-                ],
+                    return $image;
+                },
+            ],
         ])->category('banner')->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [
@@ -194,22 +194,22 @@ class TestUploader extends TestCase
         ]);
 
         $this->testModel->uploads($fakeImages)->each([
-                [
-                    'size_name' => 'img1',
-                    'spatie' => function ($image) {
-                        $image->optimize()->width(100)->height(100);
+            [
+                'size_name' => 'img1',
+                'spatie' => function ($image) {
+                    $image->optimize()->width(100)->height(100);
 
-                        return $image;
-                    },
-                ],
-                [
-                    'size_name' => 'img2',
-                    'spatie' => function ($image) {
-                        $image->optimize()->width(300)->height(300);
+                    return $image;
+                },
+            ],
+            [
+                'size_name' => 'img2',
+                'spatie' => function ($image) {
+                    $image->optimize()->width(300)->height(300);
 
-                        return $image;
-                    },
-                ],
+                    return $image;
+                },
+            ],
         ])->save();
 
         $this->assertDatabaseHas((new Image)->getTable(), [

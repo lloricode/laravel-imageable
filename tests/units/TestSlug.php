@@ -23,18 +23,18 @@ class TestSlug extends TestCase
             ])->uploads([
                 $fakeImage,
             ])->each([
-                    [
-                        'size_name' => 'test_image',
-                        'spatie' => function ($image) {
-                            return $image;
-                        },
-                    ],
-                    [
-                        'size_name' => 'test_image_2',
-                        'spatie' => function ($image) {
-                            return $image;
-                        },
-                    ],
+                [
+                    'size_name' => 'test_image',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ],
+                [
+                    'size_name' => 'test_image_2',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ],
             ])->save();
         }
 

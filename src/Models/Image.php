@@ -63,7 +63,7 @@ class Image extends Model
         static::creating(function ($image) {
             $slug = str_slug("{$image->size_name} {$image->width} {$image->height} {$image->group} {$image->category}");
 
-            $count = self::where('slug', 'like', $slug.'%')->count() + 1;
+            $count = self::where('slug', 'like', $slug . '%')->count() + 1;
 
             $image->slug = "$slug-$count";
         });

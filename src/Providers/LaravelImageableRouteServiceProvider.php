@@ -32,11 +32,11 @@ class LaravelImageableRouteServiceProvider extends RouteServiceProvider
 
     protected function mapApiRoutes()
     {
-        Route::prefix('api/imageable')->middleware('api')->as('imageable.api.')->namespace(self::NAMESPAME)->group(__DIR__.'/../resources/routes/api-route.php');
+        Route::prefix('api/imageable')->middleware('api')->as('imageable.api.')->namespace(self::NAMESPAME)->group(__DIR__ . '/../resources/routes/api-route.php');
     }
 
     protected function mapWebRoutes()
     {
-        Route::prefix('imageable')->middleware('web')->as('imageable.web.')->namespace(self::NAMESPAME)->group(__DIR__.'/../resources/routes/web-route.php');
+        Route::prefix('imageable')->middleware('web')->as('imageable.web.')->namespace(self::NAMESPAME)->group(__DIR__ . '/../resources/routes/web-route.php');
     }
 }

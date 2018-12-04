@@ -26,15 +26,6 @@ class TestCase extends Orchestra
         Artisan::call('storage:link');
     }
 
-    public function tearDown()
-    {
-        $folder = Image::PATH_FOLDER.'/';
-        Storage::disk('local')->deleteDirectory($folder);
-        Storage::disk('public')->deleteDirectory($folder);
-
-        parent::tearDown();
-    }
-
     /**
      * Set up the database.
      *
@@ -42,7 +33,7 @@ class TestCase extends Orchestra
      */
     protected function setUpDatabase($app)
     {
-        include_once __DIR__.'/../database/migrations/migration.stub';
+        include_once __DIR__ . '/../database/migrations/migration.stub';
         (new \CreateImageablesTable())->up();
 
         $app['db']->connection()->getSchemaBuilder()->create('test_models', function (Blueprint $table) {
@@ -66,6 +57,15 @@ class TestCase extends Orchestra
             'first_name' => 'Basic',
             'last_name' => 'User',
         ]);
+    }
+
+    public function tearDown()
+    {
+        $folder = Image::PATH_FOLDER . '/';
+        Storage::disk('local')->deleteDirectory($folder);
+        Storage::disk('public')->deleteDirectory($folder);
+
+        parent::tearDown();
     }
 
     /**

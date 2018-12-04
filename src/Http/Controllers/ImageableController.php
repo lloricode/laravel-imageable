@@ -25,7 +25,7 @@ class ImageableController extends Controller
     {
         $storage = Config::get("filesystems.disks.{$image->disk}.root");
 
-        return response()->file($storage.'/'.$image->path, [
+        return response()->file($storage . '/' . $image->path, [
             'Content-Type' => $image->content_type,
         ]);
     }

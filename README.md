@@ -1,5 +1,5 @@
-# Laravel Imageable 
-
+# Laravel Imageable [ABANDONED]
+please use this [spatie/laravel-medialibrary](https://github.com/spatie/laravel-medialibrary)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lloricode/laravel-imageable.svg)](https://packagist.org/packages/lloricode/laravel-imageable) [![Build Status](https://travis-ci.org/lloricode/laravel-imageable.svg?branch=develop)](https://travis-ci.org/lloricode/laravel-imageable) [![Total Downloads](https://img.shields.io/packagist/dt/lloricode/laravel-imageable.svg)](https://packagist.org/packages/lloricode/laravel-imageable)
 

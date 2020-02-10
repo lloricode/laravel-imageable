@@ -143,8 +143,14 @@ class Uploader
                             'imageable_type' => get_class($this->_model),
                         ])->count() > 0, FileNotUniqueException::class, 'File upload needs to be unique.');
 
-                    $filePath = $storagePath . '/' . $each['size_name'] . '-' . explode('.',
-                            $uploadedFile->getClientOriginalName())[0] . '.';
+                    $filePath = $storagePath.'/'.
+                                explode(
+                                    '.',
+                                    $uploadedFile->getClientOriginalName()
+                                )[0].
+                                '-'.
+                                $each['size_name'].
+                                '.';
 
                     $toBeUpload = $each['spatie'](SpatieImage::load($uploadedFile));
 

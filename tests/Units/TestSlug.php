@@ -8,7 +8,7 @@ use Lloricode\LaravelImageable\Tests\TestCase;
 
 class TestSlug extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->actingAs($this->user);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="vendor/autoload.php"
          backupGlobals="false"
          backupStaticAttributes="false"
          colors="true"
@@ -8,21 +9,22 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="false">
-    <testsuites>
-        <testsuite name="League Test Suite">
-            <directory suffix=".php">./tests/units/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/</directory>
-        </whitelist>
-    </filter>
-    <php>
-        <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
-        <env name="APP_URL" value="http://localhost"/>
-        <env name="APP_DEBUG" value="true"/>
-        <env name="CACHE_DRIVER" value="array"/>
-    </php>
+         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">src/</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="League Test Suite">
+      <directory suffix=".php">./tests/Units/</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
+    <env name="APP_URL" value="http://localhost"/>
+    <env name="APP_DEBUG" value="true"/>
+    <env name="CACHE_DRIVER" value="array"/>
+  </php>
 </phpunit>

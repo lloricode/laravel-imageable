@@ -7,7 +7,7 @@ use Spatie\Image\Manipulations;
 
 class TestUploaderPublicDelete extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->actingAs($this->user);

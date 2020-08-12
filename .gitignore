@@ -3,3 +3,4 @@
 /.vscode
 output.txt
 /.idea
+.phpunit.result.cache

@@ -8,7 +8,7 @@ use Spatie\Image\Manipulations;
 
 class TestUploader extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->actingAs($this->user);

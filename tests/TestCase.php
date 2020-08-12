@@ -18,7 +18,7 @@ class TestCase extends Orchestra
 
     protected $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -59,7 +59,7 @@ class TestCase extends Orchestra
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $folder = Image::PATH_FOLDER . '/';
         Storage::disk('local')->deleteDirectory($folder);

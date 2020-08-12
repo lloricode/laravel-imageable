@@ -12,7 +12,8 @@
     "require": {      
         "php" : ">=7.0",
         "laravel/framework": ">=5.5",
-        "spatie/image": "^1.5"
+        "spatie/image": "^1.5",
+        "laravel/helpers": "^1.2"
     },
     "require-dev": {
         "orchestra/testbench": "^5.3",
@@ -28,8 +29,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Lloricode\\LaravelImageable\\Tests\\": "tests/",
-            "App\\": "tests/models/"
+            "Lloricode\\LaravelImageable\\Tests\\": "tests/"
         }
     },
     "extra": {

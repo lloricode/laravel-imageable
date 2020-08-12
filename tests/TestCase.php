@@ -2,8 +2,8 @@
 
 namespace Lloricode\LaravelImageable\Tests;
 
-use App\Models\TestModel;
-use App\Models\User;
+use Lloricode\LaravelImageable\Tests\Models\TestModel;
+use Lloricode\LaravelImageable\Tests\Models\User;
 use Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Storage;

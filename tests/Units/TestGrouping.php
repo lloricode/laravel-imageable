@@ -7,9 +7,9 @@
  * Time: 2:14 PM
  */
 
-namespace Lloricode\LaravelImageable\Tests\units;
+namespace Lloricode\LaravelImageable\Tests\Units;
 
-use App\Models\TestModel;
+use Lloricode\LaravelImageable\Tests\Models\TestModel;
 use Lloricode\LaravelImageable\Tests\TestCase;
 
 /**

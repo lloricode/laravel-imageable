@@ -58,6 +58,6 @@ class TestUploaderPublic extends TestCase
         $response = $this->call('DELETE', $images->first()->source_delete);
 
         $this->assertEquals(204, $response->getStatusCode());
-        $this->assertFileNotExists(public_path(str_replace(config('app.url'), '', $images->first()->source)));
+        $this->assertFileDoesNotExist(public_path(str_replace(config('app.url'), '', $images->first()->source)));
     }
 }

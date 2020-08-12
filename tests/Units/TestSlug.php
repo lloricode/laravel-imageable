@@ -2,7 +2,7 @@
 
 namespace Lloricode\LaravelImageable\Tests\Units;
 
-use App\Models\TestModel;
+use Lloricode\LaravelImageable\Tests\Models\TestModel;
 use Lloricode\LaravelImageable\Models\Image;
 use Lloricode\LaravelImageable\Tests\TestCase;
 

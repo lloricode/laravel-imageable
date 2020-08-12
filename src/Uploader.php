@@ -9,6 +9,7 @@ use Exception;
 use File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Lloricode\LaravelImageable\Exceptions\FileNotUniqueException;
 use Lloricode\LaravelImageable\Exceptions\InvalidMimeTypeException;
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
@@ -48,7 +49,7 @@ class Uploader
     private $_disk;
 
     /**
-     * @var \Illuminate\Database\Eloquent\Model
+     * @var \Illuminate\Database\Eloquent\Model|\Lloricode\LaravelImageable\Models\Traits\ImageableTrait
      */
     private $_model;
 
@@ -106,7 +107,7 @@ class Uploader
     private function _availableDisks(): array
     {
         $configFileSystem = $this->_configFileSystem;
-        array_forget($configFileSystem['disks'], $configFileSystem['cloud']);
+        Arr::forget($configFileSystem['disks'], $configFileSystem['cloud']);
 
         return array_keys($configFileSystem['disks']);
     }
@@ -123,6 +124,7 @@ class Uploader
         // check content types
         if (!empty($this->_contentTypes)) {
             $uploadedFiles->map(function ($uploadedFile, $key) {
+                /** @var \Illuminate\Http\UploadedFile $uploadedFile */
                 throw_if(!in_array($uploadedFile->getMimeType(), $this->_contentTypes), InvalidMimeTypeException::class,
                     'Invalid content type it must [' . implode(', ',
                         $this->_contentTypes) . '], ' . $uploadedFile->getMimeType() . ' given.');
@@ -131,6 +133,7 @@ class Uploader
 
         DB::transaction(function () use ($uploadedFiles, $storagePath) {
             $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
+                /** @var \Illuminate\Http\UploadedFile $uploadedFile */
                 $group = md5($this->_now->addSeconds($group + 1)->format('Ymdhis') . get_class($this->_model) . $this->_model->id . $this->_category);
                 $this->_model->getImages();
                 $order = 1;
@@ -184,7 +187,7 @@ class Uploader
                         'content_type' => $mimeType,
                         'extension' => $fileExtension,
                         'path' => str_replace($this->_storageDiskPath(), '', $fullFilePath),
-                        'bytes' => $uploadedFile->getClientSize() ?: 0,
+                        'bytes' => $uploadedFile->getSize() ?: 0,
                         'disk' => $this->_disk,
                         'category' => $this->_category,
                         'group' => $group,

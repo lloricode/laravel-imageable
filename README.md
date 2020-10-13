@@ -150,3 +150,44 @@ $myModel->deleteImages($size_name = null, $category = null, $group = null);
 # via http delete
 # using `source_delete` return from collection
 ```
+- Regenerate
+```php
+
+        // files to be upload 
+        $imageFiles = [
+            //  instance of \Illuminate\Http\UploadedFile
+            $imageFile1,
+        ];
+
+        $myModel->uploads($imageFiles)// must array, 
+            ->each([
+                [
+                    'size_name' => 'from', // this will be use in calling image
+                    'spatie' => function ($image) {
+
+                        // ....
+
+                        return $image;
+                    },
+                ],
+                [
+                    'size_name' => 'to', // this will be use in calling image
+                    'spatie' => function ($image) {
+
+                         // ....
+
+                        return $image;
+                    },
+                ],
+                [
+                    'size_name' => 'other', // this will be use in calling image
+                    'spatie' => function ($image) {
+
+                         // ....
+
+                        return $image;
+                    },
+                ],
+            ])
+            ->regenerate('from'); // will regenerate `to` and`other`
+```

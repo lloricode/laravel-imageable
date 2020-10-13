@@ -112,6 +112,39 @@ class Uploader
         return array_keys($configFileSystem['disks']);
     }
 
+    public function regenerate(string $fromSizeName)
+    {
+        $each = collect($this->_each);
+
+        $from = $each->where('size_name', $fromSizeName);
+
+        if ($from->isEmpty()) {
+            abort(500, "size_name `$fromSizeName` not found from ".$this->_model->getMorphClass().'.');
+        }
+
+        $fromFilePath = $this->_model
+            ->images()
+            ->where('size_name', $fromSizeName)
+            ->first()->path;
+
+        $other = $each->reject(
+            function ($each1) use ($fromSizeName) {
+                return $each1['size_name'] == $fromSizeName;
+            }
+        );
+
+        $other->map(
+            function ($each1) use ($fromFilePath) {
+                $finalPath = $imageModel = $this->_model
+                    ->images()
+                    ->where('size_name', $each1['size_name'])
+                    ->first()->path;
+                $each1['spatie'](SpatieImage::load($this->_storageDiskPath().$fromFilePath))
+                    ->save($this->_storageDiskPath().$finalPath);
+            }
+        );
+    }
+
     /**
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */

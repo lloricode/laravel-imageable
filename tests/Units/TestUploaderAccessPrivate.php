@@ -15,16 +15,20 @@ class TestUploaderAccessPrivate extends TestCase
     public function testUploadFilePrivateStorage()
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
-        $this->testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $this->testModel->uploads(
             [
-                'size_name' => 'private_test',
-                'spatie' => function ($image) {
-                    return $image;
-                },
-            ],
-        ])->disk('local')->save();
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'private_test',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ],
+            ]
+        )->disk('local')->save();
 
         $images = $this->testModel->getImages('private_test');
 

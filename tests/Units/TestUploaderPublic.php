@@ -18,31 +18,38 @@ class TestUploaderPublic extends TestCase
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
-        $this->testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $this->testModel->uploads(
             [
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'public_test',
+                    'spatie' => function ($image) {
+                        $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
+
+                        return $image;
+                    },
+                ],
+            ]
+        )->disk('public')->save();
+
+        $this->assertDatabaseHas(
+            (new Image())->getTable(),
+            [
+                'imageable_id' => $this->testModel->id,
+                'imageable_type' => get_class($this->testModel),
+                'user_id' => $this->user->id,
                 'size_name' => 'public_test',
-                'spatie' => function ($image) {
-                    $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
-
-                    return $image;
-                },
-            ],
-        ])->disk('public')->save();
-
-        $this->assertDatabaseHas((new Image)->getTable(), [
-            'imageable_id' => $this->testModel->id,
-            'imageable_type' => get_class($this->testModel),
-            'user_id' => $this->user->id,
-            'size_name' => 'public_test',
-            'width' => 120,
-            'height' => 300,
-            'extension' => 'jpg',
-            'disk' => 'public',
-            'category' => null,
-            'content_type' => 'image/jpeg',
-        ]);
+                'width' => 120,
+                'height' => 300,
+                'extension' => 'jpg',
+                'disk' => 'public',
+                'category' => null,
+                'content_type' => 'image/jpeg',
+            ]
+        );
 
         $images = $this->testModel->getImages('public_test');
 

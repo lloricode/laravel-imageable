@@ -18,29 +18,39 @@ class TestSaveDifferentFormat extends TestCase
     {
         $fakeImage = $this->generateFakeFile(1, 'png', 120, 300);
 
-        $this->testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $this->testModel->uploads(
             [
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'public_test',
+                    'spatie' => function ($image) {
+                        $image->optimize()->format(Manipulations::FORMAT_JPG)->fit(
+                            Manipulations::FIT_CONTAIN,
+                            120,
+                            300
+                        )->quality(90);
+
+                        return $image;
+                    },
+                ],
+            ]
+        )->disk('public')->save();
+
+        $this->assertDatabaseHas(
+            (new Image())->getTable(),
+            [
+                'imageable_id' => $this->testModel->id,
+                'imageable_type' => get_class($this->testModel),
+                'user_id' => $this->user->id,
                 'size_name' => 'public_test',
-                'spatie' => function ($image) {
-                    $image->optimize()->format(Manipulations::FORMAT_JPG)->fit(Manipulations::FIT_CONTAIN, 120,
-                        300)->quality(90);
-
-                    return $image;
-                },
-            ],
-        ])->disk('public')->save();
-
-        $this->assertDatabaseHas((new Image)->getTable(), [
-            'imageable_id' => $this->testModel->id,
-            'imageable_type' => get_class($this->testModel),
-            'user_id' => $this->user->id,
-            'size_name' => 'public_test',
-            'extension' => 'jpg', // <---------------
-            'disk' => 'public',
-            'category' => null,
-            'content_type' => 'image/jpeg',
-        ]);
+                'extension' => 'jpg', // <---------------
+                'disk' => 'public',
+                'category' => null,
+                'content_type' => 'image/jpeg',
+            ]
+        );
     }
 }

@@ -9,8 +9,8 @@
 
 namespace Lloricode\LaravelImageable\Tests\Units;
 
-use Lloricode\LaravelImageable\Tests\Models\TestModel;
 use Lloricode\LaravelImageable\Exceptions\FileNotUniqueException;
+use Lloricode\LaravelImageable\Tests\Models\TestModel;
 use Lloricode\LaravelImageable\Tests\TestCase;
 
 /**
@@ -26,62 +26,81 @@ class TestUniqueFile extends TestCase
         $this->expectException(FileNotUniqueException::class);
 
         $fakeImage = $this->generateFakeFile();
-        $testModel = TestModel::create([
-            'name' => 'test',
-        ]);
-
-        $testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $testModel = TestModel::create(
             [
-                'size_name' => 'test_image',
-                'spatie' => function ($image) {
-                    return $image;
-                },
-            ],
-        ])->save();
+                'name' => 'test',
+            ]
+        );
 
-        $testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $testModel->uploads(
             [
-                'size_name' => 'test_image',
-                'spatie' => function ($image) {
-                    return $image;
-                },
-            ],
-        ])->save();
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'test_image',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ],
+            ]
+        )->save();
+
+        $testModel->uploads(
+            [
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'test_image',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ],
+            ]
+        )->save();
     }
 
     public function testUniqueUploadNotThrow()
     {
-
         $fakeImage = $this->generateFakeFile();
-        $testModel = TestModel::create([
-            'name' => 'test',
-        ]);
-
-        $testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $testModel = TestModel::create(
             [
-                'size_name' => 'test_image',
-                'spatie' => function ($image) {
-                    return $image;
-                },
-            ],
-        ])->save();
+                'name' => 'test',
+            ]
+        );
 
-        $testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $testModel->uploads(
             [
-                'size_name' => 'test_image',
-                'spatie' => function ($image) {
-                    return $image;
-                },
-            ],
-        ])->category('test')->save();
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'test_image',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ],
+            ]
+        )->save();
+
+        $testModel->uploads(
+            [
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'test_image',
+                    'spatie' => function ($image) {
+                        return $image;
+                    },
+                ],
+            ]
+        )->category('test')->save();
 
         $this->assertTrue(true);
     }

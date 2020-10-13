@@ -27,21 +27,26 @@ class TestGrouping extends TestCase
 
     public function _grouping(int $count = 1)
     {
-        $testModel = TestModel::create([
-            'name' => 'test',
-        ]);
+        $testModel = TestModel::create(
+            [
+                'name' => 'test',
+            ]
+        );
         for ($i = 0; $i < $count; $i++) {
-
-            $testModel->uploads([
-                $this->generateFakeFile(),
-            ])->each([
+            $testModel->uploads(
                 [
-                    'size_name' => 'test_image',
-                    'spatie' => function ($image) {
-                        return $image;
-                    },
-                ],
-            ])->category('category_' . ($i + 1))->save();
+                    $this->generateFakeFile(),
+                ]
+            )->each(
+                [
+                    [
+                        'size_name' => 'test_image',
+                        'spatie' => function ($image) {
+                            return $image;
+                        },
+                    ],
+                ]
+            )->category('category_'.($i + 1))->save();
         }
 
         $this->assertCount($count, $testModel->getImages()->unique('group'));

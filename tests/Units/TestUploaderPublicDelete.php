@@ -17,18 +17,22 @@ class TestUploaderPublicDelete extends TestCase
     {
         $fakeImage = $this->generateFakeFile(1, 'jpg', 120, 300);
 
-        $this->testModel->uploads([
-            $fakeImage,
-        ])->each([
+        $this->testModel->uploads(
             [
-                'size_name' => 'public_test',
-                'spatie' => function ($image) {
-                    $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
+                $fakeImage,
+            ]
+        )->each(
+            [
+                [
+                    'size_name' => 'public_test',
+                    'spatie' => function ($image) {
+                        $image->optimize()->fit(Manipulations::FIT_CONTAIN, 120, 300)->quality(90);
 
-                    return $image;
-                },
-            ],
-        ])->disk('public')->save();
+                        return $image;
+                    },
+                ],
+            ]
+        )->disk('public')->save();
 
         $images = $this->testModel->getImages('public_test');
 

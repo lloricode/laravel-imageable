@@ -29,39 +29,49 @@ class TestCase extends Orchestra
     /**
      * Set up the database.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      */
     protected function setUpDatabase($app)
     {
-        include_once __DIR__ . '/../database/migrations/migration.stub';
+        include_once __DIR__.'/../database/migrations/migration.stub';
         (new \CreateImageablesTable())->up();
 
-        $app['db']->connection()->getSchemaBuilder()->create('test_models', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->timestamps();
-        });
+        $app['db']->connection()->getSchemaBuilder()->create(
+            'test_models',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->timestamps();
+            }
+        );
 
-        $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->timestamps();
-        });
+        $app['db']->connection()->getSchemaBuilder()->create(
+            'users',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('first_name');
+                $table->string('last_name');
+                $table->timestamps();
+            }
+        );
 
-        $this->testModel = TestModel::create([
-            'name' => 'test',
-        ]);
+        $this->testModel = TestModel::create(
+            [
+                'name' => 'test',
+            ]
+        );
 
-        $this->user = User::create([
-            'first_name' => 'Basic',
-            'last_name' => 'User',
-        ]);
+        $this->user = User::create(
+            [
+                'first_name' => 'Basic',
+                'last_name' => 'User',
+            ]
+        );
     }
 
     public function tearDown(): void
     {
-        $folder = Image::PATH_FOLDER . '/';
+        $folder = Image::PATH_FOLDER.'/';
         Storage::disk('local')->deleteDirectory($folder);
         Storage::disk('public')->deleteDirectory($folder);
 
@@ -71,18 +81,22 @@ class TestCase extends Orchestra
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
+        $app['config']->set(
+            'database.connections.testbench',
+            [
+                'driver' => 'sqlite',
+                'database' => ':memory:',
+                'prefix' => '',
+            ]
+        );
     }
 
     protected function getPackageAliases($app)

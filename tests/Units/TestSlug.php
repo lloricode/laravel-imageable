@@ -2,8 +2,8 @@
 
 namespace Lloricode\LaravelImageable\Tests\Units;
 
-use Lloricode\LaravelImageable\Tests\Models\TestModel;
 use Lloricode\LaravelImageable\Models\Image;
+use Lloricode\LaravelImageable\Tests\Models\TestModel;
 use Lloricode\LaravelImageable\Tests\TestCase;
 
 class TestSlug extends TestCase
@@ -18,24 +18,30 @@ class TestSlug extends TestCase
     {
         $fakeImage = $this->generateFakeFile();
         foreach (range(1, 10) as $index) {
-            TestModel::create([
-                'name' => 'test',
-            ])->uploads([
-                $fakeImage,
-            ])->each([
+            TestModel::create(
                 [
-                    'size_name' => 'test_image',
-                    'spatie' => function ($image) {
-                        return $image;
-                    },
-                ],
+                    'name' => 'test',
+                ]
+            )->uploads(
                 [
-                    'size_name' => 'test_image_2',
-                    'spatie' => function ($image) {
-                        return $image;
-                    },
-                ],
-            ])->save();
+                    $fakeImage,
+                ]
+            )->each(
+                [
+                    [
+                        'size_name' => 'test_image',
+                        'spatie' => function ($image) {
+                            return $image;
+                        },
+                    ],
+                    [
+                        'size_name' => 'test_image_2',
+                        'spatie' => function ($image) {
+                            return $image;
+                        },
+                    ],
+                ]
+            )->save();
         }
 
         $this->assertCount(20, Image::all());

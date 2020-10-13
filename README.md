@@ -143,14 +143,14 @@ Illuminate\Support\Collection {#2947
   ]
 }
 ```
-- Delete
+### Delete
 ```php
 $myModel->deleteImages($size_name = null, $category = null, $group = null);
 
 # via http delete
 # using `source_delete` return from collection
 ```
-- Regenerate
+### Regenerate
 ```php
 
         // files to be upload 

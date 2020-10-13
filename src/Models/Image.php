@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Storage;
  */
 class Image extends Model
 {
-    const UPDATED_AT = null;
+    public const UPDATED_AT = null;
 
-    const PATH_FOLDER = 'imageable';
+    public const PATH_FOLDER = 'imageable';
 
     /**
      * Declared Fillables
@@ -49,7 +49,7 @@ class Image extends Model
     /**
      * Image constructor.
      *
-     * @param array $attributes
+     * @param  array  $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -60,16 +60,22 @@ class Image extends Model
     public static function boot()
     {
         parent::boot();
-        static::creating(function ($image) {
-            $slug = str_slug("{$image->size_name} {$image->width} {$image->height} {$image->group} {$image->category}");
+        static::creating(
+            function ($image) {
+                $slug = str_slug(
+                    "{$image->size_name} {$image->width} {$image->height} {$image->group} {$image->category}"
+                );
 
-            $count = self::where('slug', 'like', $slug . '%')->count() + 1;
+                $count = self::where('slug', 'like', $slug.'%')->count() + 1;
 
-            $image->slug = "$slug-$count";
-        });
-        static::deleted(function ($image) {
-            Storage::disk($image->disk)->delete($image->path);
-        });
+                $image->slug = "$slug-$count";
+            }
+        );
+        static::deleted(
+            function ($image) {
+                Storage::disk($image->disk)->delete($image->path);
+            }
+        );
     }
 
     /**

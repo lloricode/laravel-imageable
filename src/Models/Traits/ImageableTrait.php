@@ -19,7 +19,8 @@ use Lloricode\LaravelImageable\Uploader;
 trait ImageableTrait
 {
     /**
-     * @param array $images
+     * @param  array  $images
+     *
      * @return \Lloricode\LaravelImageable\Uploader
      * @throws \Throwable
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
@@ -43,33 +44,39 @@ trait ImageableTrait
             $names[] = str_replace('-', '_', kebab_case($exploded));
         }
 
-        return Config::get('imageable.cache.prefix') . '_' . implode('_', $names) . '_' . $this->id . '_queries';
+        return Config::get('imageable.cache.prefix').'_'.implode('_', $names).'_'.$this->id.'_queries';
     }
 
     /**
-     * @param string|null $name
-     * @param string|null $category
-     * @param string|null $group
+     * @param  string|null  $name
+     * @param  string|null  $category
+     * @param  string|null  $group
+     *
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */
     public function deleteImages(string $name = null, string $category = null, string $group = null)
     {
-        DB::transaction(function () use ($name, $category, $group) {
-            $this->getImages($name, $category, $group)->map(function ($image) {
-                $image = $this->images()->where('slug', $image->slug)->first();
+        DB::transaction(
+            function () use ($name, $category, $group) {
+                $this->getImages($name, $category, $group)->map(
+                    function ($image) {
+                        $image = $this->images()->where('slug', $image->slug)->first();
 
-                if (Config::get('imageable.cache.enable') === true) {
-                    Cache::tags($image->imageable->getCachePrefix())->flush();
-                }
-                $image->delete();
-            });
-        });
+                        if (Config::get('imageable.cache.enable') === true) {
+                            Cache::tags($image->imageable->getCachePrefix())->flush();
+                        }
+                        $image->delete();
+                    }
+                );
+            }
+        );
     }
 
     /**
-     * @param string|null $name
-     * @param string|null $category
-     * @param string|null $group
+     * @param  string|null  $name
+     * @param  string|null  $category
+     * @param  string|null  $group
+     *
      * @return \Illuminate\Support\Collection
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */

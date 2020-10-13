@@ -4,7 +4,6 @@ namespace Lloricode\LaravelImageable\Http\Controllers;
 
 use Cache;
 use Config;
-use DB;
 use Lloricode\LaravelImageable\Models\Image;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 class ImageableController extends Controller
 {
     /**
-     * @param \Lloricode\LaravelImageable\Models\Image $image
+     * @param  \Lloricode\LaravelImageable\Models\Image  $image
+     *
      * @return mixed
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */
@@ -25,13 +25,17 @@ class ImageableController extends Controller
     {
         $storage = Config::get("filesystems.disks.{$image->disk}.root");
 
-        return response()->file($storage . '/' . $image->path, [
-            'Content-Type' => $image->content_type,
-        ]);
+        return response()->file(
+            $storage.'/'.$image->path,
+            [
+                'Content-Type' => $image->content_type,
+            ]
+        );
     }
 
     /**
-     * @param \Lloricode\LaravelImageable\Models\Image $image
+     * @param  \Lloricode\LaravelImageable\Models\Image  $image
+     *
      * @return \Illuminate\Http\JsonResponse
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */

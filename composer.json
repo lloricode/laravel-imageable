@@ -16,7 +16,7 @@
         "laravel/helpers": "^1.2"
     },
     "require-dev": {
-        "orchestra/testbench": "^5.3",
+        "orchestra/testbench": "^5.3|^6.2",
         "phpunit/phpunit": "^9.3"
     },
     "autoload": {

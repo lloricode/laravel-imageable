@@ -134,7 +134,7 @@ class Uploader
         DB::transaction(function () use ($uploadedFiles, $storagePath) {
             $uploadedFiles->map(function ($uploadedFile, $group) use ($storagePath) {
                 /** @var \Illuminate\Http\UploadedFile $uploadedFile */
-                $group = md5($this->_now->addSeconds($group + 1)->format('Ymdhis') . get_class($this->_model) . $this->_model->id . $this->_category);
+                $group = md5($this->_now->addSeconds($group + 1)->format('Ymdhis') . get_class($this->_model) . $this->_model->getKey() . $this->_category);
                 $this->_model->getImages();
                 $order = 1;
                 foreach ($this->_each as $each) {
@@ -142,8 +142,8 @@ class Uploader
                             'size_name' => $each['size_name'],
                             'group' => $group,
                             'category' => $this->_category,
-                            'imageable_id' => $this->_model->id,
-                            'imageable_type' => get_class($this->_model),
+                            'imageable_id' => $this->_model->getKey(),
+                            'imageable_type' => $this->_model->getMorphClass(),
                         ])->count() > 0, FileNotUniqueException::class, 'File upload needs to be unique.');
 
                     $filePath = $storagePath.'/'.

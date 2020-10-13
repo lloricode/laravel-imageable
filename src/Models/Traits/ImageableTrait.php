@@ -25,7 +25,7 @@ trait ImageableTrait
      * @throws \Throwable
      * @author Lloric Mayuga Garcia <lloricode@gmail.com>
      */
-    public function uploads(array $images): Uploader
+    public function uploads(array $images = []): Uploader
     {
         $uploader = resolve(Uploader::class);
         $uploader->prepare($this, $images);

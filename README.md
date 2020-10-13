@@ -153,13 +153,7 @@ $myModel->deleteImages($size_name = null, $category = null, $group = null);
 ### Regenerate
 ```php
 
-        // files to be upload 
-        $imageFiles = [
-            //  instance of \Illuminate\Http\UploadedFile
-            $imageFile1,
-        ];
-
-        $myModel->uploads($imageFiles)// must array, 
+        $myModel->uploads()
             ->each([
                 [
                     'size_name' => 'from', // this will be use in calling image

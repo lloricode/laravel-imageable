@@ -13,7 +13,7 @@ class RegenerateTest extends TestCase
      */
     public function regenerate_all()
     {
-        $this->modelImageSetUp($this->testModel)->save();
+        $this->modelImageSetUp($this->testModel, [$this->generateFakeFile()])->save();
 
         $fromImage = $this->testModel->getImages('from')->first();
         $toImage = $this->testModel->getImages('to')->first();
@@ -54,27 +54,27 @@ class RegenerateTest extends TestCase
 
     /**
      * @param $testModel
+     * @param  array  $files
      *
      * @return \Lloricode\LaravelImageable\Uploader
      * @throws \Throwable
      */
-    private function modelImageSetUp($testModel)
+    private function modelImageSetUp($testModel, array $files = [])
     {
         /** @var TestModel $testModel */
-        return $testModel->uploads(
-            [$this->generateFakeFile(1, 'jpg', 120, 300)]
-
-        )->disk('public')->each(
-            [
+        return $testModel->uploads($files)
+            ->disk('public')
+            ->each(
                 [
-                    'size_name' => 'from',
-                    'spatie' => function ($image) {
-                        return $image;
-                    },
-                ],
-                [
-                    'size_name' => 'to',
-                    'spatie' => function ($image) {
+                    [
+                        'size_name' => 'from',
+                        'spatie' => function ($image) {
+                            return $image;
+                        },
+                    ],
+                    [
+                        'size_name' => 'to',
+                        'spatie' => function ($image) {
                         return $image;
                     },
                 ],

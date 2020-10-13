@@ -179,7 +179,7 @@ class Uploader
                     $image = SpatieImage::load($fullFilePath);
 
                     $this->_model->images()->create([
-                        'user_id' => optional($this->_getAuthUser())->id,
+                        'user_id' => optional($this->_getAuthUser())->getKey(),
                         'client_original_name' => $uploadedFile->getClientOriginalName(),
                         'size_name' => $each['size_name'],
                         'width' => $image->getWidth(),

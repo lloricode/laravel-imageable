@@ -13,7 +13,8 @@
         "php" : ">=7.3",
         "laravel/framework": ">=5.5",
         "spatie/image": "^1.5",
-        "laravel/helpers": "^1.2"
+        "laravel/helpers": "^1.2",
+      "ext-fileinfo": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^5.3|^6.2",

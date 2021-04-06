@@ -9,12 +9,11 @@
             "email": "lloricode@gmail.com"
         }
     ],
-    "require": {      
-        "php" : ">=7.3",
+    "require": {
+        "php": ">=7.3",
+        "ext-fileinfo": "*",
         "laravel/framework": ">=5.5",
-        "spatie/image": "^1.5",
-        "laravel/helpers": "^1.2",
-      "ext-fileinfo": "*"
+        "spatie/image": "^1.5"
     },
     "require-dev": {
         "orchestra/testbench": "^5.3|^6.2",

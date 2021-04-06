@@ -10,6 +10,7 @@ use File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Lloricode\LaravelImageable\Exceptions\FileNotUniqueException;
 use Lloricode\LaravelImageable\Exceptions\InvalidMimeTypeException;
 use Lloricode\LaravelImageable\Models\Image as ImageModel;
@@ -244,7 +245,7 @@ class Uploader
      */
     private function _storagePath()
     {
-        $path = ImageModel::PATH_FOLDER . '/' . kebab_case(class_basename($this->_model)) . '/' . md5($this->_model->id);
+        $path = ImageModel::PATH_FOLDER.'/'.Str::kebab(class_basename($this->_model)).'/'.md5($this->_model->id);
 
         $path = $this->_storageDiskPath() . $path;
 

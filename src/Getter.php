@@ -6,6 +6,8 @@ use Cache;
 use Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use stdClass;
 
 /**
  * Class Getter
@@ -88,7 +90,7 @@ class Getter
         foreach ($imageFiles as $imageFile) {
             $disk = Config::get("filesystems.disks.{$imageFile->disk}");
 
-            $data = new \stdClass;
+            $data = new stdClass();
 
             $data->size_name = $imageFile->size_name;
             $data->category = $imageFile->category;
@@ -127,7 +129,7 @@ class Getter
 
         $cacheName = '';
         foreach (explode('\\', get_class($this->_model)) as $exploded) {
-            $cacheName .= '-' . str_replace('-', '_', kebab_case($exploded));
+            $cacheName .= '-'.str_replace('-', '_', Str::kebab($exploded));
         }
 
         $cacheName .= '-' . $this->_model->id;

@@ -6,6 +6,7 @@ use Cache;
 use Config;
 use DB;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Lloricode\LaravelImageable\Getter;
 use Lloricode\LaravelImageable\Models\Image;
 use Lloricode\LaravelImageable\Uploader;
@@ -41,7 +42,7 @@ trait ImageableTrait
     {
         $names = [];
         foreach (explode('\\', get_class($this)) as $exploded) {
-            $names[] = str_replace('-', '_', kebab_case($exploded));
+            $names[] = str_replace('-', '_', Str::kebab($exploded));
         }
 
         return Config::get('imageable.cache.prefix').'_'.implode('_', $names).'_'.$this->id.'_queries';

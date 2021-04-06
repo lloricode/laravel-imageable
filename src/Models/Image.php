@@ -5,6 +5,7 @@ namespace Lloricode\LaravelImageable\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * Class Image
@@ -62,7 +63,7 @@ class Image extends Model
         parent::boot();
         static::creating(
             function ($image) {
-                $slug = str_slug(
+                $slug = Str::slug(
                     "{$image->size_name} {$image->width} {$image->height} {$image->group} {$image->category}"
                 );
 

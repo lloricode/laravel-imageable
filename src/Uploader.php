@@ -97,7 +97,9 @@ class Uploader
         $this->_group = null;
         $this->_now = now();
 
-        $this->_disk = $this->_configFileSystem['default'] == $this->_configFileSystem['cloud'] ? $this->_availableDisks()[0] : $this->_configFileSystem['default'];
+        $this->_disk = isset($this->_configFileSystem['cloud']) && $this->_configFileSystem['default'] == $this->_configFileSystem['cloud']
+            ? $this->_availableDisks()[0]
+            : $this->_configFileSystem['default'];
     }
 
     /**
@@ -107,8 +109,9 @@ class Uploader
     private function _availableDisks(): array
     {
         $configFileSystem = $this->_configFileSystem;
-        Arr::forget($configFileSystem['disks'], $configFileSystem['cloud']);
-
+        if (isset($configFileSystem['cloud'])) {
+            Arr::forget($configFileSystem['disks'], $configFileSystem['cloud']);
+        }
         return array_keys($configFileSystem['disks']);
     }
 

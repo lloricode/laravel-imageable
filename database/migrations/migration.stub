@@ -28,7 +28,9 @@ class CreateImageablesTable extends Migration
             $table->string('slug')->unique();
 
             $configFilesystem = Config::get('filesystems');
-            array_forget($configFilesystem['disks'], $configFilesystem['cloud']);
+            if (isset($configFilesystem['cloud'])) {
+                array_forget($configFilesystem['disks'], $configFilesystem['cloud']);
+            }
             $table->enum('disk', array_keys($configFilesystem['disks']))->comment = 'disks in config filesystem, except cloud.';
 
             $table->string('client_original_name');
